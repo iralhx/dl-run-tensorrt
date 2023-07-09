@@ -1,2 +1,2 @@
 # dl-run-tensorrt
-使用tensorrt来进行推理
+将onnx模型转为trt模型并进行预测。
