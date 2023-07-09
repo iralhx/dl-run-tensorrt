@@ -4,7 +4,7 @@
 #include<NvInferRuntime.h>
 
 
-#define IMAGESIZE 256*256
+#define IMAGESIZE 256*256* sizeof(float)
 using namespace nvinfer1;
 
 void worker(const std::string& modelfile, const std::string& imagefile) {
@@ -35,35 +35,35 @@ void worker(const std::string& modelfile, const std::string& imagefile) {
     assert(context_det != nullptr);
 
 
-	cv::Mat img = cv::imread(imagefile);
+	cv::Mat img = cv::imread(imagefile,cv::ImreadModes::IMREAD_GRAYSCALE);
     assert(!img.empty());
+    cv::Mat floatImg;
+    img.convertTo(floatImg, CV_32FC1);
+    floatImg /= 255;
 
+    // Create GPU buffers on device
     float* buffers[2];
-    cudaMalloc((void**)&buffers[0], IMAGESIZE * sizeof(float));
-    cudaMalloc((void**)&buffers[1], IMAGESIZE * sizeof(float));
+    cudaMalloc((void**)&buffers[0], IMAGESIZE );
+    cudaMalloc((void**)&buffers[1], IMAGESIZE );
     // Create stream
     cudaStream_t stream;
     cudaStreamCreate(&stream);
     uint8_t* img_host = nullptr;
-    uint8_t* img_device = nullptr;
     // prepare input data cache in pinned memory 
-    cudaMallocHost((void**)&img_host, IMAGESIZE);
-    // prepare input data cache in device memory
-    cudaMalloc((void**)&img_device, IMAGESIZE);
+    cudaMallocHost((void**)&img_host, IMAGESIZE );
 
-    memcpy(img_host, img.data, IMAGESIZE);
-    cudaMemcpyAsync(img_device, img_host, IMAGESIZE, cudaMemcpyHostToDevice, stream);
+    cudaMemcpyAsync(buffers[0], floatImg.data, IMAGESIZE , cudaMemcpyHostToDevice, stream);
     cudaStreamSynchronize(stream);
-    (*context_det).enqueueV2((void**)buffers, stream, nullptr);
-    cudaMemcpyAsync(img_host, img_device, IMAGESIZE, cudaMemcpyDeviceToHost, stream);
+    bool resute =(*context_det).executeV2((void**)buffers);
+    assert(resute);
+    cudaMemcpyAsync(img_host, buffers[1], IMAGESIZE, cudaMemcpyDeviceToHost, stream);
     cudaStreamSynchronize(stream);
     // 将 img_host 中的数据保存为图像
-    cv::Mat resultImage(IMAGESIZE, 1, CV_8UC1, img_host);
+    cv::Mat resultImage(256,256, CV_32FC1, img_host);
     resultImage *= 255;
-    cv::imwrite("./result.jpg", resultImage);
+    cv::imwrite("E:/VS/WorkSpa2022/dl-run-tensorrt/result.jpg", resultImage);
 
     // 释放内存
     cudaFreeHost(img_host);
-    cudaFree(img_device);
 }
 
