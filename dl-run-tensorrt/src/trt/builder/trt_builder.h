@@ -35,6 +35,7 @@ namespace trt {
 
 	bool onnx2trt(const std::string& file, const std::string& savefile);
 
+	void* readmodel(const std::string& modelfile);
 }
 
 

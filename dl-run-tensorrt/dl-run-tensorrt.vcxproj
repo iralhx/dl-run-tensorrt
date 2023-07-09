@@ -167,6 +167,7 @@
     <ClCompile Include="src\yolo\yolo.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\trt\find_line\findline.h" />
     <ClInclude Include="src\trt\model\IModel.h" />
     <ClInclude Include="src\common\common.h" />
     <ClInclude Include="src\trt\builder\trt_builder.h" />

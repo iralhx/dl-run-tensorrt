@@ -2,6 +2,8 @@
 #include <string>
 #include <opencv2/opencv.hpp>
 #include <cuda_runtime.h>
+#include<NvInfer.h>
+#include<NvInferRuntime.h>
 
 namespace trt {
 
@@ -17,5 +19,4 @@ namespace trt {
 		//自定义的输出
 		virtual T forwork(const cv::Mat& img) = 0;
 	};
-
 }

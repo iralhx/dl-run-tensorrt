@@ -4,6 +4,7 @@
 #include<trt\builder\trt_builder.h>
 #include<yolo/yolo.h>
 #include <cassert>
+#include<trt/find_line/findline.h>
 
 
 int main()
@@ -19,8 +20,13 @@ int main()
 
 	set_device(0);
 
-	worker(save_file, imagefile);
+	trt::findline line(save_file);
+	cv::Mat(img) = cv::imread(imagefile);
 
+
+	void* result = line.forwork(img);
+	cv::Mat mat(256, 256, CV_32FC1, result);
+	cv::imwrite("E:/VS/WorkSpa2022/dl-run-tensorrt/result1.jpg", mat);
 	
 	return 0;
 }

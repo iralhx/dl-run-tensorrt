@@ -56,6 +56,31 @@ namespace trt {
 
 		return true;
 	};
+
+	void* readmodel(const std::string& modelfile) {
+
+		char* trtModelStreamDet{ nullptr };
+		size_t size{ 0 };
+		std::ifstream file(modelfile, std::ios::binary);
+		if (file.good()) {
+			file.seekg(0, file.end);
+			size = file.tellg();
+			file.seekg(0, file.beg);
+			trtModelStreamDet = new char[size];
+			assert(trtModelStreamDet);
+			file.read(trtModelStreamDet, size);
+			file.close();
+		}
+		std::shared_ptr<nvinfer1::IRuntime> runtime_det(createInferRuntime(gLogger), destroy_nvidia_pointer<nvinfer1::IRuntime>);
+		assert(runtime_det != nullptr);
+		std::shared_ptr<ICudaEngine> engine_det(runtime_det->deserializeCudaEngine(trtModelStreamDet, size), destroy_nvidia_pointer<ICudaEngine>);
+		assert(engine_det != nullptr);
+		std::shared_ptr < IExecutionContext> context_det ( engine_det->createExecutionContext(), destroy_nvidia_pointer<IExecutionContext>);
+		assert(context_det != nullptr);
+		delete[] trtModelStreamDet;
+		return context_det.get();
+	};
+
 };
 
 

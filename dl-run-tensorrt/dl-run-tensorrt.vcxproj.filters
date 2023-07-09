@@ -53,5 +53,8 @@
     <ClInclude Include="src\trt\model\IModel.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\trt\find_line\findline.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
