@@ -158,16 +158,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\app\find_line\findline.cpp" />
+    <ClCompile Include="src\app\model\IModel.cpp" />
     <ClCompile Include="src\common\common.cpp" />
-    <ClCompile Include="src\file\file_help.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\trt\builder\trt_builder.cpp" />
     <ClCompile Include="src\trt\infer\trt_infer.cpp" />
     <ClCompile Include="src\yolo\yolo.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\app\model\IModel.h" />
     <ClInclude Include="src\common\common.h" />
-    <ClInclude Include="src\file\file_help.h" />
     <ClInclude Include="src\trt\builder\trt_builder.h" />
     <ClInclude Include="src\trt\infer\trt_infer.h" />
     <ClInclude Include="src\yolo\yolo.h" />

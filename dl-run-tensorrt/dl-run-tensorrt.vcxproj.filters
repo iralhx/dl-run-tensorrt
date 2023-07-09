@@ -27,10 +27,13 @@
     <ClCompile Include="src\Main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\file\file_help.cpp">
+    <ClCompile Include="src\common\common.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\common\common.cpp">
+    <ClCompile Include="src\app\model\IModel.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\find_line\findline.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,10 +47,10 @@
     <ClInclude Include="src\yolo\yolo.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\file\file_help.h">
+    <ClInclude Include="src\common\common.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\common\common.h">
+    <ClInclude Include="src\app\model\IModel.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,11 +1,13 @@
 #include<yolo/yolo.h>
-#include<file/file_help.h>
 #include "cuda_runtime_api.h"
 #include<NvInferRuntime.h>
 
 
 #define IMAGESIZE 256*256* sizeof(float)
 using namespace nvinfer1;
+using namespace common;
+using namespace trt;
+
 
 void worker(const std::string& modelfile, const std::string& imagefile) {
 	if (!fileExists(imagefile))
@@ -27,13 +29,13 @@ void worker(const std::string& modelfile, const std::string& imagefile) {
         file.close();
     }
 
-    std::shared_ptr<IRuntime> runtime_det(createInferRuntime(gLogger), destroy_nvidia_pointer<IRuntime>);
+    std::shared_ptr<IRuntime> runtime_det(createInferRuntime( gLogger), destroy_nvidia_pointer<IRuntime>);
     assert(runtime_det != nullptr);
     std::shared_ptr<ICudaEngine> engine_det(runtime_det->deserializeCudaEngine(trtModelStreamDet, size), destroy_nvidia_pointer<ICudaEngine>);
     assert(engine_det != nullptr);
     std::shared_ptr<IExecutionContext> context_det(engine_det->createExecutionContext(), destroy_nvidia_pointer<IExecutionContext>);
     assert(context_det != nullptr);
-
+    
 
 	cv::Mat img = cv::imread(imagefile,cv::ImreadModes::IMREAD_GRAYSCALE);
     assert(!img.empty());
