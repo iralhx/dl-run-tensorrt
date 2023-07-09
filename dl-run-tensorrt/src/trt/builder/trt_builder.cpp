@@ -8,47 +8,21 @@
 #include <vector>
 #include <NvOnnxParser.h>
 #include <cassert>
+#include <common/common.h>
 using namespace nvinfer1;
 using namespace std;
 
-class Logger : public ILogger {
-public:
-	virtual void log(Severity severity, const char* msg) noexcept override {
-
-		if (severity == Severity::kINTERNAL_ERROR) {
-			fprintf(stderr, "NVInfer INTERNAL_ERROR: %s", msg);
-		}
-		else if (severity == Severity::kERROR) {
-			fprintf(stderr, "NVInfer: %s", msg);
-		}
-		else  if (severity == Severity::kWARNING) {
-			fprintf(stderr, "NVInfer: %s", msg);
-		}
-		else  if (severity == Severity::kINFO) {
-			fprintf(stderr, "NVInfer: %s", msg);
-		}
-		else {
-			fprintf(stderr, "%s", msg);
-		}
-	}
-};
-
-template<typename _T>
-static void destroy_nvidia_pointer(_T* ptr) {
-	if (ptr) ptr->destroy();
-}
 void saveToTrtModel(const char* TrtSaveFileName, IHostMemory* trtModelStream)
 {
 	std::ofstream out(TrtSaveFileName, std::ios::binary);
 	if (!out.is_open())
 	{
-		std::cout << "打开文件失败!" << std::endl;
+		INFO("打开文件失败!");
 	}
 	out.write(reinterpret_cast<const char*>(trtModelStream->data()), trtModelStream->size());
 	out.close();
 }
 
-static Logger gLogger;
 
 bool Compile(const string& file, const string& savefile) {
 
