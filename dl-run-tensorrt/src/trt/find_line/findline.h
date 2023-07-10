@@ -3,7 +3,7 @@
 #include<trt/model/IModel.h>
 #include<NvInfer.h>
 namespace trt {
-    class findline :public trt::IModel<void*>
+    class findline :public trt::IModel<cv::Mat>
     {
     private:
         std::string modelpath;
@@ -16,14 +16,12 @@ namespace trt {
         uint8_t* cudahost;
     public:
 
-        findline();
-
         ~findline() {
             dispose();
         }
         findline(const std::string& path);
 
-        void* forwork(const cv::Mat& img);
+        cv::Mat forwork(const cv::Mat& img);
 
     private:
         void init();

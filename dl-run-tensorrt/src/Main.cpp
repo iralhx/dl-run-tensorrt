@@ -23,12 +23,11 @@ int main()
 	//worker(save_file, imagefile);
 
 	trt::findline line(save_file);
-	cv::Mat(img) = cv::imread(imagefile);
+	cv::Mat(img) = cv::imread(imagefile, cv::ImreadModes::IMREAD_GRAYSCALE);
 
 
-	void* result = line.forwork(img);
-	/*cv::Mat mat(256, 256, CV_32FC1, result);
-	cv::imwrite("./../result1.jpg", mat);*/
+	cv::Mat mat = line.forwork(img);
+	cv::imwrite("./../result1.jpg", mat);
 	
 	return 0;
 }

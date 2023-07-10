@@ -14,29 +14,16 @@ namespace trt {
         findline::init();
 	};
 
-    void* findline::forwork(const cv::Mat& img) {
+    cv::Mat findline::forwork(const cv::Mat& img) {
         assert(context != nullptr);
         assert(!img.empty());
         //预处理图片
         cv::Mat floatImg;
         img.convertTo(floatImg, CV_32FC1);
-        cv::imwrite("./../debug1.jpg", floatImg);
         floatImg /= 255;
-
-        cv::imwrite("./../debug2.jpg", floatImg);
-
-
 
         cudaMemcpyAsync(buffers[0], floatImg.data, IMAGESIZE, cudaMemcpyHostToDevice, stream);
         cudaStreamSynchronize(stream);
-
-        cudaMemcpyAsync(cudahost, buffers[0], IMAGESIZE, cudaMemcpyHostToDevice, stream);
-        cudaStreamSynchronize(stream);
-        cv::Mat resultImage1(256, 256, CV_32FC1, cudahost);
-        cv::imwrite("./../debug3.jpg", resultImage1);
-        resultImage1 *= 255;
-        cv::imwrite("./../debug4.jpg", resultImage1);
-
 
         bool resute = context->executeV2((void**)buffers);
         assert(resute);
@@ -45,8 +32,7 @@ namespace trt {
         // 将 cudahost 中的数据保存为图像
         cv::Mat resultImage(256, 256, CV_32FC1, cudahost);
         resultImage *= 255;
-        cv::imwrite("./../result1.jpg", resultImage);
-        return &resultImage;
+        return resultImage;
     };
 
     void findline::dispose()
