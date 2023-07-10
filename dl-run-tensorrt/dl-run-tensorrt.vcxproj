@@ -54,7 +54,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.0.props" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.6.props" />
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
@@ -86,8 +86,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>.\src;.\..\require\CUDA\include;.\..\require\TensorRT-8.5.3.1\include;E:\VS\WorkSpa2022\dl-run-tensorrt\require\opencv3.4.6\include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\VS\WorkSpa2022\dl-run-tensorrt\require\TensorRT-8.5.3.1\lib;E:\VS\WorkSpa2022\dl-run-tensorrt\require\CUDA\lib;E:\VS\WorkSpa2022\dl-run-tensorrt\require\opencv3.4.6\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>.\src;.\..\require\CUDA\include;.\..\require\TensorRT-8.5.3.1\include;.\..\require\opencv3.4.6\include;$(IncludePath)</IncludePath>
+    <LibraryPath>.\..\require\TensorRT-8.5.3.1\lib;.\..\require\CUDA\lib;.\..\require\opencv3.4.6\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
@@ -176,6 +176,6 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.0.targets" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.6.targets" />
   </ImportGroup>
 </Project>

@@ -63,7 +63,7 @@ void worker(const std::string& modelfile, const std::string& imagefile) {
     // 将 img_host 中的数据保存为图像
     cv::Mat resultImage(256,256, CV_32FC1, img_host);
     resultImage *= 255;
-    cv::imwrite("E:/VS/WorkSpa2022/dl-run-tensorrt/result.jpg", resultImage);
+    cv::imwrite("./../result.jpg", resultImage);
 
     // 释放内存
     cudaFreeHost(img_host);
