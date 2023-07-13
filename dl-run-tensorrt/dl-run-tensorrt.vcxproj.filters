@@ -21,7 +21,7 @@
     <ClCompile Include="src\trt\infer\trt_infer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\yolo\yolo.cpp">
+    <ClCompile Include="src\app\yolo\yolo.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Main.cpp">
@@ -33,7 +33,10 @@
     <ClCompile Include="src\trt\model\IModel.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\trt\find_line\findline.cpp">
+    <ClCompile Include="src\app\find_line\findline.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\export\findlinexport.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,7 +47,7 @@
     <ClInclude Include="src\trt\infer\trt_infer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\yolo\yolo.h">
+    <ClInclude Include="src\app\yolo\yolo.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\common\common.h">
@@ -53,7 +56,13 @@
     <ClInclude Include="src\trt\model\IModel.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\trt\find_line\findline.h">
+    <ClInclude Include="src\app\find_line\findline.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\export\findlinexport.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\trt\commom\trt_common.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

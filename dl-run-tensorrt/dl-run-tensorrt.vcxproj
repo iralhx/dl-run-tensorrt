@@ -54,7 +54,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.0.props" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.6.props" />
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
@@ -158,26 +158,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\app\findlinexport.cpp" />
+    <ClCompile Include="src\export\findlinexport.cpp" />
     <ClCompile Include="src\Main.cpp" />
-    <ClCompile Include="src\trt\find_line\findline.cpp" />
+    <ClCompile Include="src\app\find_line\findline.cpp" />
     <ClCompile Include="src\trt\model\IModel.cpp" />
     <ClCompile Include="src\common\common.cpp" />
     <ClCompile Include="src\trt\builder\trt_builder.cpp" />
     <ClCompile Include="src\trt\infer\trt_infer.cpp" />
-    <ClCompile Include="src\yolo\yolo.cpp" />
+    <ClCompile Include="src\app\yolo\yolo.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\app\findlinexport.h" />
-    <ClInclude Include="src\trt\find_line\findline.h" />
+    <ClInclude Include="src\export\findlinexport.h" />
+    <ClInclude Include="src\app\find_line\findline.h" />
+    <ClInclude Include="src\trt\commom\trt_common.h" />
     <ClInclude Include="src\trt\model\IModel.h" />
     <ClInclude Include="src\common\common.h" />
     <ClInclude Include="src\trt\builder\trt_builder.h" />
     <ClInclude Include="src\trt\infer\trt_infer.h" />
-    <ClInclude Include="src\yolo\yolo.h" />
+    <ClInclude Include="src\app\yolo\yolo.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.0.targets" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.6.targets" />
   </ImportGroup>
 </Project>

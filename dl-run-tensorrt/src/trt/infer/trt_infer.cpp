@@ -11,11 +11,6 @@ bool check_runtime(cudaError_t e, const char* call, int line, const char* file) 
     return true;
 }
 
-void set_device(int device_id) {
-	if (device_id == -1)
-		return;
-	checkCudaRuntime(cudaSetDevice(device_id));
-}
 
 
 

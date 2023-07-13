@@ -3,7 +3,6 @@
 #include <string>
 #include <cstdio>
 #include <memory>
-#include <NvInferRuntimeCommon.h>
 #include <cassert>
 
 namespace common {

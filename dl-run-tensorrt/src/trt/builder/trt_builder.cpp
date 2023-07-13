@@ -9,6 +9,7 @@
 #include <NvOnnxParser.h>
 #include <cassert>
 #include <common/common.h>
+#include<trt/commom/trt_common.h>
 using namespace nvinfer1;
 using namespace std;
 namespace trt {

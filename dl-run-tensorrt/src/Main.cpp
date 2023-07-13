@@ -2,9 +2,9 @@
 #include<iostream>
 #include<trt\infer\trt_infer.h>
 #include<trt\builder\trt_builder.h>
-#include<yolo/yolo.h>
 #include <cassert>
-#include<trt/find_line/findline.h>
+#include<trt/commom/trt_common.h>
+#include<app/find_line/findline.h>
 
 
 int main()
@@ -18,7 +18,7 @@ int main()
 		trt:: onnx2trt(onnx_file, save_file);
 	}
 
-	set_device(0);
+	trt::set_device(0);
 
 	//worker(save_file, imagefile);
 
