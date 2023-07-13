@@ -22,12 +22,14 @@ int main()
 
 	//worker(save_file, imagefile);
 
-	trt::findline line(save_file);
+	app::findline line(save_file);
 	cv::Mat(img) = cv::imread(imagefile, cv::ImreadModes::IMREAD_GRAYSCALE);
 
 
 	cv::Mat mat = line.forwork(img);
-	cv::imwrite("./../result1.jpg", mat);
+	cv::imshow("Image with Rectangle", mat);
+	cv::waitKey(0);
+	//cv::imwrite("./../result1.jpg", mat);
 	
 	return 0;
 }

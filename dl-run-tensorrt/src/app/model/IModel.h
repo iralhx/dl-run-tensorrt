@@ -32,7 +32,6 @@ public:
 	//自定义的输出
 	virtual T forwork(const cv::Mat& img) = 0;
 
-protected:
 	virtual void init()
 	{
 		//读取模型
@@ -48,7 +47,7 @@ protected:
 			file.read(trtModelStreamDet, size);
 			file.close();
 		}
-		runtime = createInferRuntime(gLogger);
+		runtime = createInferRuntime(trt::gLogger);
 		assert(runtime != nullptr);
 		engine = runtime->deserializeCudaEngine(trtModelStreamDet, size);
 		assert(engine != nullptr);
@@ -58,6 +57,7 @@ protected:
 
 		cudaStreamCreate(&stream);
 	};
+protected:
 
 	virtual void dispose()
 	{

@@ -54,7 +54,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.6.props" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 12.0.props" />
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
@@ -139,6 +139,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>nvinfer.lib;nvinfer_plugin.lib;nvonnxparser.lib;nvparsers.lib;cudnn.lib;cublas.lib;opencv_world346d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <CudaCompile>
+      <CodeGeneration>sm_30;</CodeGeneration>
+      <GenerateRelocatableDeviceCode>true</GenerateRelocatableDeviceCode>
+    </CudaCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -158,20 +162,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <CudaCompile Include="src\app\cuda\process.cu">
+      <FileType>CppCode</FileType>
+    </CudaCompile>
+    <ClCompile Include="src\app\model\IModel.cpp" />
     <ClCompile Include="src\export\findlinexport.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\app\find_line\findline.cpp" />
-    <ClCompile Include="src\trt\model\IModel.cpp" />
     <ClCompile Include="src\common\common.cpp" />
     <ClCompile Include="src\trt\builder\trt_builder.cpp" />
+    <ClCompile Include="src\trt\commom\trt_common.cpp" />
     <ClCompile Include="src\trt\infer\trt_infer.cpp" />
     <ClCompile Include="src\app\yolo\yolo.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\app\common\object_detetion.h" />
+    <ClInclude Include="src\app\cuda\cuda_kernel.h" />
+    <ClInclude Include="src\app\model\IModel.h" />
     <ClInclude Include="src\export\findlinexport.h" />
     <ClInclude Include="src\app\find_line\findline.h" />
     <ClInclude Include="src\trt\commom\trt_common.h" />
-    <ClInclude Include="src\trt\model\IModel.h" />
     <ClInclude Include="src\common\common.h" />
     <ClInclude Include="src\trt\builder\trt_builder.h" />
     <ClInclude Include="src\trt\infer\trt_infer.h" />
@@ -179,6 +189,6 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.6.targets" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 12.0.targets" />
   </ImportGroup>
 </Project>

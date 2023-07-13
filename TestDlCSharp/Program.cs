@@ -21,11 +21,6 @@ namespace TestDlCSharp
 
         static void Main(string[] args)
         {
-            if (File.Exists(dllName))
-            {
-
-            }
-
 
             string imgpath = @"I:\github\dl-run-tensorrt/1.bmp";
             string modelpath = @"I:\github\dl-run-tensorrt/FullConModel.engine";

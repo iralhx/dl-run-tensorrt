@@ -30,13 +30,16 @@
     <ClCompile Include="src\common\common.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\trt\model\IModel.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\app\find_line\findline.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\export\findlinexport.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\model\IModel.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\trt\commom\trt_common.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -53,9 +56,6 @@
     <ClInclude Include="src\common\common.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\trt\model\IModel.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="src\app\find_line\findline.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -65,5 +65,19 @@
     <ClInclude Include="src\trt\commom\trt_common.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\app\model\IModel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\common\object_detetion.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\cuda\cuda_kernel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="src\app\cuda\process.cu">
+      <Filter>源文件</Filter>
+    </CudaCompile>
   </ItemGroup>
 </Project>

@@ -15,9 +15,9 @@ namespace app {
         findline(const std::string& path);
 
         cv::Mat forwork(const cv::Mat& img);
+        void init() override;
 
     protected:
-        void init() override;
         void dispose() override;
     };
 };
