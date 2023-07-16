@@ -38,11 +38,10 @@ namespace app {
             cudaStreamSynchronize(stream);
 
             bool resute = context->executeV2((void**)buffers);
-            //assert(resute);
-            //transpose_kernel_invoker(buffers[1], output_candidates, num_classes + 4, transpose_device, stream);  //transpose [1 84 8400] convert to [1 8400 84]
-
+            assert(resute);
+            transposeDevice(buffers[1], output_candidates, num_classes + 4, transpose_device);  //transpose [1 84 8400] convert to [1 8400 84]
             cudaMemsetAsync(decode_ptr_device, 0, sizeof(int), stream);
-            //decode_kernel_invoker(transpose_device, output_candidates, num_classes, bbox_conf_thresh, decode_ptr_device, max_objects, stream); //后处理 cuda
+            decode_result(transpose_device, output_candidates, num_classes, bbox_conf_thresh, decode_ptr_device, max_objects); //后处理 cuda
             //nms_kernel_invoker(decode_ptr_device, nms_thresh, max_objects, stream);//cuda nms          
             cudaMemcpyAsync(decode_ptr_host, decode_ptr_device, sizeof(float) * (1 + max_objects * 7), cudaMemcpyDeviceToHost, stream);
             cudaStreamSynchronize(stream);

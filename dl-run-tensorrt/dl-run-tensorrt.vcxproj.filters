@@ -21,7 +21,7 @@
     <ClCompile Include="src\trt\infer\trt_infer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\app\yolo\yolo.cpp">
+    <ClCompile Include="src\app\yolov8\yolo.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Main.cpp">
@@ -50,7 +50,7 @@
     <ClInclude Include="src\trt\infer\trt_infer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\app\yolo\yolo.h">
+    <ClInclude Include="src\app\yolov8\yolo.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\common\common.h">
@@ -71,13 +71,14 @@
     <ClInclude Include="src\app\common\object_detetion.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\app\cuda\cuda_kernel.h">
+    <ClInclude Include="src\app\yolov8\decode_kernel.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="src\app\cuda\process.cu">
+    <CudaCompile Include="src\app\yolov8\decode_kernel.cu">
       <Filter>源文件</Filter>
     </CudaCompile>
+    <CudaCompile Include="src\app\common\cuda_common.h" />
   </ItemGroup>
 </Project>
