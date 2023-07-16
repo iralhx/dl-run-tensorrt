@@ -6,7 +6,7 @@
 #include<NvInferRuntime.h>
 #include<common/common.h>
 #include<trt/commom/trt_common.h>
-
+#include<fstream>
 using namespace nvinfer1;
 
 template<typename T>

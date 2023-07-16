@@ -4,8 +4,7 @@
     <ShowAllFiles>true</ShowAllFiles>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LocalDebuggerEnvironment>path=.\..\require\TensorRT-8.5.3.1\lib;.\..\require\opencv3.4.6\lib;.\..\require\CUDA\lib\x64;.\..\require\CUDA\bin;
-$(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
+    <LocalDebuggerEnvironment>path=.\..\require\TensorRT\lib;.\..\require\opencv\lib;.\..\require\CUDA\lib;.\..\require\CUDA\bin;.\..\require\cudnn\bin;.\..\require\cudnn\lib; $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>
