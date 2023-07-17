@@ -166,6 +166,7 @@
     <CudaCompile Include="src\app\yolov8\decode_kernel.cu">
       <FileType>CppCode</FileType>
     </CudaCompile>
+    <ClCompile Include="src\app\common\cuda_common.cpp" />
     <ClCompile Include="src\app\model\IModel.cpp" />
     <ClCompile Include="src\export\findlinexport.cpp" />
     <ClCompile Include="src\Main.cpp" />

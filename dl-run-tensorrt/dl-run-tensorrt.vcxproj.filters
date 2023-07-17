@@ -42,6 +42,9 @@
     <ClCompile Include="src\trt\commom\trt_common.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\app\common\cuda_common.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\trt\builder\trt_builder.h">

@@ -1,4 +1,8 @@
 #include "decode_kernel.h"
+#include <algorithm>
+#include <cuda.h>
+#include <iostream>
+#include <cuda_runtime.h>
 //1*84*8400
 //1*8400*84
 __global__ void transpose_kernel(float *src,int num_bboxes, int num_class,float *dst){
@@ -18,9 +22,9 @@ __global__ void transpose_kernel(float *src,int num_bboxes, int num_class,float 
 
 void app::transposeDevice(float* src, int num_bboxes, int num_class, float* dst)
 {
-    dim3 block_size(BLOCK_SIZE, BLOCK_SIZE);
     dim3 grid_size(ceil(num_bboxes  / BLOCK_SIZE),
         ceil((num_class+4)/ BLOCK_SIZE));
+    dim3 block_size(BLOCK_SIZE, BLOCK_SIZE);
 
     transpose_kernel << < grid_size, block_size >> > (src, num_bboxes, num_class, dst);
 }
@@ -57,8 +61,8 @@ static __global__ void decode_kernel(float* predict, int num_bboxes, int num_cla
     if (confidence < confidence_threshold)
         return;
 
-    int index = atomicAdd(parray, 1);
-    if (index >= max_objects)
+    int indexResult = atomicAdd(parray, 1);
+    if (indexResult >= max_objects)
         return;
 
     float cx = *pitem++;
@@ -70,7 +74,7 @@ static __global__ void decode_kernel(float* predict, int num_bboxes, int num_cla
     float right = cx + width * 0.5f;
     float bottom = cy + height * 0.5f;
 
-    float* pout_item = parray + 1 + index * NUM_BOX_ELEMENT;
+    float* pout_item = parray + 1 + indexResult * NUM_BOX_ELEMENT;
     *pout_item++ = left;
     *pout_item++ = top;
     *pout_item++ = right;
@@ -78,6 +82,8 @@ static __global__ void decode_kernel(float* predict, int num_bboxes, int num_cla
     *pout_item++ = confidence;
     *pout_item++ = label;
     *pout_item++ = 1; // 1 = keep, 0 = ignore
+    printf("ÕâÊÇµÚ:%d", indexResult);
+
 };
 
 
@@ -142,12 +148,11 @@ static __global__ void nms_kernel(float* bboxes, int max_objects, float threshol
     }
 }
 
-void nms_kernel_invoker(float* parray, float nms_threshold, int max_objects, cudaStream_t stream) {
+void app::nms_kernel_invoker(float* parray, float nms_threshold, int max_objects) {
 
-    dim3 block_size(BLOCK_SIZE, BLOCK_SIZE);
-    dim3 grid_size(ceil((num_class + 4) / BLOCK_SIZE),
-        ceil(num_bboxes / BLOCK_SIZE));
-    nms_kernel << <grid, block, 0, stream >> > (parray, max_objects, nms_threshold);
+    dim3 block = block_dims (max_objects);
+    dim3 grid = grid_dims(max_objects) ;
+    nms_kernel << <grid, block >> > (parray, max_objects, nms_threshold);
 }
 
 
