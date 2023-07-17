@@ -46,7 +46,7 @@ static __global__ void decode_kernel(float* predict, int num_bboxes, int num_cla
         return;
     }
 
-    float* pitem = predict + (4 + num_classes) * index;
+    float* pitem = predict + (4 + num_classes) * index*sizeof(float);
 
     float* class_confidence = pitem + 4;
     float confidence = *class_confidence++;
@@ -73,6 +73,8 @@ static __global__ void decode_kernel(float* predict, int num_bboxes, int num_cla
     float top = cy - height * 0.5f;
     float right = cx + width * 0.5f;
     float bottom = cy + height * 0.5f;
+    printf("Source,cx:%f,cy:%f,width:%f,height:%f\n",
+        cx, cy, width, height);
 
     float* pout_item = parray + 1 + indexResult * NUM_BOX_ELEMENT;
     *pout_item++ = left;
@@ -82,7 +84,8 @@ static __global__ void decode_kernel(float* predict, int num_bboxes, int num_cla
     *pout_item++ = confidence;
     *pout_item++ = label;
     *pout_item++ = 1; // 1 = keep, 0 = ignore
-    printf("这是第:%d", indexResult);
+    printf("这是第:%d,left:%f,top:%f,right:%f,bottom:%f,confidence:%f,label:%f\n", 
+        indexResult , left, top, right,bottom,confidence,label);
 
 };
 
@@ -93,7 +96,6 @@ void app::decode_result(float* predict, int num_bboxes, int num_class, float con
     dim3 block_size(BLOCK_SIZE, BLOCK_SIZE);
     dim3 grid_size( ceil((num_class + 4) / BLOCK_SIZE),
         ceil(num_bboxes / BLOCK_SIZE));
-
     decode_kernel << < grid_size, block_size >> > (predict, num_bboxes, num_class, confidence_threshold, parray, max_objects);
 }
 

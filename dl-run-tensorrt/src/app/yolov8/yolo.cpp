@@ -5,8 +5,8 @@ namespace app {
 
     yolo::yolo() = default;
     yolo::~yolo() {
-        IModel::dispose();
         dispose();
+        IModel::dispose();
     };
 
     yolo::yolo(const std::string& path) {
@@ -70,7 +70,7 @@ namespace app {
             std::string  label_string = std::to_string((int)boxes[i].class_label) + " " + std::to_string(boxes[i].confidence);
             cv::putText(img, label_string, cv::Point(boxes[i].left, boxes[i].top - 1), cv::FONT_HERSHEY_PLAIN, 1.2, cv::Scalar(0xFF, 0xFF, 0xFF), 2);
         }
-        cv::imwrite("image_name.jpg", img);
+        cv::imwrite("../image_name.jpg", img);
     };
 
 
