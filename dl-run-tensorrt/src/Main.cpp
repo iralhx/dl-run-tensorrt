@@ -11,6 +11,7 @@
 int main()
 {
 
+	trt::set_device(0);
 	std::string onnx_file = "./../yolov8n.onnx";
 	std::string save_file = "./../yolov8n.engine";
 	std::string imagefile = "./../bus1.jpg";
@@ -19,7 +20,6 @@ int main()
 		trt:: onnx2trt(onnx_file, save_file);
 	}
 
-	trt::set_device(0);
 
 	//worker(save_file, imagefile);
 

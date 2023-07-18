@@ -6,17 +6,21 @@
 #include<trt/commom/trt_common.h>
 #include"decode_kernel.h"
 #include<app/common/object_detetion.h>
-
+#define MAX_IMAGE_INPUT_SIZE_THRESH 2000 * 2000
 
 namespace app {
     class yolo :public IModel<void>
     {
     private:
+        float* affine_matrix_d2i_host ;
+        float* affine_matrix_d2i_device;
+        float* cuda_host_img;
+        float* cuda_device_img;
         float* buffers[2];
         int width;
         int height;
-        float* transpose_device;
         float* decode_ptr_device;
+        cv::Size tergetsize;
     public:
         int num_classes = 80;
         int output_candidates = 8400;
