@@ -11,7 +11,7 @@ extern "C" __declspec(dllexport) void _cdecl dispose_findline(IModel<cv::Mat>* m
 	delete model;
 }
 
-extern "C" __declspec(dllexport) uchar* _cdecl findline_forwork(IModel<cv::Mat>*model, const cv::Mat & img)
+extern "C" __declspec(dllexport) uchar* _cdecl findline_forwork(IModel<cv::Mat>*model, cv::Mat & img)
 {
 	return model->forwork(img).ptr();
 }

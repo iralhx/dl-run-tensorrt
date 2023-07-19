@@ -44,7 +44,7 @@ namespace app {
         cudaFree(decode_ptr_device);
     };
 
-    void yolo::forwork(const cv::Mat& img) {
+    void yolo::forwork(cv::Mat& img) {
         affine_matrix afmt;
         cv::Size from(img.cols, img.rows);
         get_affine_martrix(afmt, tergetsize, from);

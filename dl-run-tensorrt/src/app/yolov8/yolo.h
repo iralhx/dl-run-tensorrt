@@ -34,7 +34,7 @@ namespace app {
         ~yolo();
         yolo(const std::string& path);
 
-        void forwork(const cv::Mat& img);
+        void forwork(cv::Mat& img);
         void init();
 
     protected:
