@@ -29,7 +29,7 @@ int main()
 
 	cv::Mat img =  cv::imread(imagefile);
 
-	 yolo.forwork(img);
+	yolo.forwork(img);
 	//cv::imshow("Image with Rectangle", mat);
 	//cv::waitKey(0);
 	//cv::imwrite("./../result1.jpg", mat);

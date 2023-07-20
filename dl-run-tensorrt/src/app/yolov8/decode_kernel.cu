@@ -176,10 +176,9 @@ __global__ void warpaffine_kernel(
 
     int dx = position % dst_width;
     int dy = position / dst_width;
-    float src_x = m_x1 * dx + m_y1 * dy + m_z1 + 0.5f;
-    float src_y = m_x2 * dx + m_y2 * dy + m_z2 + 0.5f;
+    float src_x = m_x1 * dx + m_y1 * dy + m_z1 ;
+    float src_y = m_x2 * dx + m_y2 * dy + m_z2 ;
     float c0, c1, c2;
-
     if (src_x <= -1 || src_x >= src_width || src_y <= -1 || src_y >= src_height) {
         // out of range
         c0 = const_value_st;
@@ -221,9 +220,9 @@ __global__ void warpaffine_kernel(
                 v4 = src + y_high * src_line_size + x_high * 3;
         }
 
-        c0 = w1 * v1[0] + w2 * v2[0] + w3 * v3[0] + w4 * v4[0];
-        c1 = w1 * v1[1] + w2 * v2[1] + w3 * v3[1] + w4 * v4[1];
-        c2 = w1 * v1[2] + w2 * v2[2] + w3 * v3[2] + w4 * v4[2];
+        c0 = floorf(w1 * v1[0] + w2 * v2[0] + w3 * v3[0] + w4 * v4[0] + 0.5f);
+        c1 = floorf(w1 * v1[1] + w2 * v2[1] + w3 * v3[1] + w4 * v4[1] + 0.5f);
+        c2 = floorf(w1 * v1[2] + w2 * v2[2] + w3 * v3[2] + w4 * v4[2] + 0.5f);
     }
 
     //bgr to rgb 
@@ -241,7 +240,6 @@ __global__ void warpaffine_kernel(
     float* pdst_c0 = dst + dy * dst_width + dx;
     float* pdst_c1 = pdst_c0 + area;
     float* pdst_c2 = pdst_c1 + area;
-    printf("c0:%d, c1:%f, c2:%f\n", position, c1, c2);
     *pdst_c0 = c0;
     *pdst_c1 = c1;
     *pdst_c2 = c2;

@@ -137,7 +137,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>nvinfer.lib;nvinfer_plugin.lib;nvonnxparser.lib;nvparsers.lib;cudnn.lib;cublas.lib;opencv_world346d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>nvinfer.lib;nvinfer_plugin.lib;nvonnxparser.lib;nvparsers.lib;cudnn.lib;cublas.lib;opencv_world480d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CudaCompile>
       <CodeGeneration>compute_61,sm_61;compute_75,sm_75;</CodeGeneration>

@@ -38,10 +38,10 @@ namespace app {
         init();
     };
     void yolo::dispose() {
-        IModel::dispose();
         cudaFree(buffers[0]);
         cudaFree(buffers[1]);
         cudaFree(decode_ptr_device);
+        IModel::dispose();
     };
 
     void yolo::forwork(cv::Mat& img) {

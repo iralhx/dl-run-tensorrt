@@ -61,10 +61,10 @@ protected:
 
 	virtual void dispose()
 	{
-		context->destroy();
-		//engine->destroy();
-		//runtime->destroy();
-		//cudaStreamDestroy(stream);
+		//context->destroy();
+		engine->destroy();
+		runtime->destroy();
+		cudaStreamDestroy(stream);
 	};
 };
 
