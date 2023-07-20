@@ -24,7 +24,10 @@ int main()
 	//worker(save_file, imagefile);
 
 	app::yolo yolo(save_file);
-	cv::Mat img = cv::imread(imagefile);
+
+
+
+	cv::Mat img =  cv::imread(imagefile);
 
 	 yolo.forwork(img);
 	//cv::imshow("Image with Rectangle", mat);
