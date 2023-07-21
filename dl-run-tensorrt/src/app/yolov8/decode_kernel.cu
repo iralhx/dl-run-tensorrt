@@ -3,30 +3,30 @@
 #include <cuda.h>
 #include <iostream>
 #include <cuda_runtime.h>
-//1*84*8400
-//1*8400*84
-__global__ void transpose_kernel(float *src,int num_bboxes, int num_class,float *dst){
+//84*8400
+//8400*84
+__global__ void transpose_kernel(float *src,int dim1, int dim2,float *dst){
 
-    int weidthIndex = blockDim.x * blockIdx.x + threadIdx.x;
-    int heightIndex = blockDim.y * blockIdx.y + threadIdx.y;
-    if (weidthIndex>=num_bboxes||heightIndex>=(num_class+4))
+    int position = blockDim.x * blockIdx.x + threadIdx.x;
+    if (position >= dim1 * dim2)
     {
         return;
     }
+    int dx = position % dim2;
+    int dy = position / dim2;
+    int detIndex = dx * dim1 + dy;
 
-    int globalIndex = heightIndex * num_bboxes+weidthIndex;
-    int detIndex = weidthIndex * (num_class + 4) + heightIndex;
-    *(dst+ detIndex) = src[globalIndex];
+    *(dst+ detIndex) = src[position];
 }
 
 
-void app::transposeDevice(float* src, int num_bboxes, int num_class, float* dst)
+void app::transposeDevice(float* src, int dim1, int dim2, float* dst)
 {
-    dim3 grid_size(ceil(num_bboxes  / BLOCK_SIZE),
-        ceil((num_class+4)/ BLOCK_SIZE));
-    dim3 block_size(BLOCK_SIZE, BLOCK_SIZE);
+    int total = dim1 * dim2;
+    dim3 block = block_dims(total);
+    dim3 grid = grid_dims(total);
 
-    transpose_kernel << < grid_size, block_size >> > (src, num_bboxes, num_class, dst);
+    transpose_kernel << < grid, block >> > (src, dim1, dim2, dst);
 }
 
 
@@ -45,12 +45,11 @@ static __global__ void decode_kernel(float* predict, int num_bboxes, int num_cla
     if (position >= num_bboxes) return;
 
     float* pitem = predict + (4 + num_classes) * position;
-    // float objectness = pitem[4];
-    // if(objectness < confidence_threshold)
-    //     return;
 
     float* class_confidence = pitem + 4;
     float confidence = *class_confidence++;
+    printf("position:%d ,pitem[0] %f,pitem[1] %f,pitem[2] %f,pitem[3] %f,pitem[4] %f,pitem[5] %f,pitem[6] %f\n",
+        position, pitem[0], pitem[1], pitem[2], pitem[3], pitem[4], pitem[5], pitem[6]);
     int label = 0;
     for (int i = 1; i < num_classes; ++i, ++class_confidence) {
         if (*class_confidence > confidence) {

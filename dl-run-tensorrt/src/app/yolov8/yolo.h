@@ -16,6 +16,7 @@ namespace app {
         float* affine_matrix_d2i_device;
         float* cuda_host_img;
         float* cuda_device_img;
+        float* cuda_transpose;
         float* buffers[2];
         int width;
         int height;

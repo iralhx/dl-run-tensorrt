@@ -62,9 +62,9 @@ protected:
 	virtual void dispose()
 	{
 		//context->destroy();
-		engine->destroy();
+		/*engine->destroy();
 		runtime->destroy();
-		cudaStreamDestroy(stream);
+		cudaStreamDestroy(stream);*/
 	};
 };
 
