@@ -66,7 +66,60 @@ namespace app {
 
         cudaMemsetAsync(decode_ptr_device, 0, sizeof(int), stream);
 
+
+
+        float* arr =new float[84*8400];
+        float* cuda_test;
+        cudaMallocHost((void**)&cuda_test, sizeof(float) * 84 * 8400);
+        cudaMemsetAsync(&cuda_test, 0, sizeof(float) * 84 * 8400);
+        cudaMemcpyAsync(cuda_test, buffers[1], sizeof(float) * 84 * 8400, cudaMemcpyDeviceToHost,stream);
+        cudaStreamSynchronize(stream);
+        memcpy(arr, cuda_test, sizeof(float) * 84 * 8400);
+        int row = 84;
+        int col = 8400;
+        float** a = new float* [row];
+
+        for (size_t i = 0; i < row; i++)
+        {
+            a[i] = new float[col];
+        }
+
+        for (size_t i = 0; i < 84 * 8400; i++)
+        {
+            int y= i / 8400;
+            int x= i % 8400;
+            a[y][x]= arr[i];
+        }
+
+
         transposeDevice(buffers[1], num_classes+4, output_candidates, cuda_transpose);
+
+        float* arr1 = new float[84 * 8400];
+        float* cuda_test1;
+        cudaMallocHost((void**)&cuda_test1, sizeof(float) * 84 * 8400);
+        cudaMemsetAsync(&cuda_test1, 0, sizeof(float) * 84 * 8400);
+        cudaMemcpyAsync(cuda_test1, cuda_transpose, sizeof(float) * 84 * 8400, cudaMemcpyDeviceToHost, stream);
+        cudaStreamSynchronize(stream);
+
+        memcpy(arr1, cuda_test1, sizeof(float) * 84 * 8400);
+
+
+        float** a1 = new float* [row];
+
+        for (size_t i = 0; i < row; i++)
+        {
+            a1[i] = new float[col];
+        }
+
+        for (size_t i = 0; i < 84 * 8400; i++)
+        {
+            int y = i / 8400;
+            int x = i % 8400;
+            a1[y][x] = arr1[i];
+        }
+
+
+        printf("a:%f , b:%f", arr[1], arr1[84]);
 
         decode_result(cuda_transpose, output_candidates, num_classes, bbox_conf_thresh, affine_matrix_d2i_device, decode_ptr_device, max_objects); //ºó´¦Àí cuda
         nms_kernel_invoker(decode_ptr_device, nms_thresh, max_objects);//cuda nms          
