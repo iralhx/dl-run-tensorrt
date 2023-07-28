@@ -48,8 +48,6 @@ static __global__ void decode_kernel(float* predict, int num_bboxes, int num_cla
 
     float* class_confidence = pitem + 4;
     float confidence = *class_confidence++;
-    printf("position:%d ,pitem[0] %f,pitem[1] %f,pitem[2] %f,pitem[3] %f,pitem[4] %f,pitem[5] %f,pitem[6] %f\n",
-        position, pitem[0], pitem[1], pitem[2], pitem[3], pitem[4], pitem[5], pitem[6]);
     int label = 0;
     for (int i = 1; i < num_classes; ++i, ++class_confidence) {
         if (*class_confidence > confidence) {
@@ -92,8 +90,8 @@ static __global__ void decode_kernel(float* predict, int num_bboxes, int num_cla
 
 void app::decode_result(float* predict, int num_bboxes, int num_class, float confidence_threshold, float* invert_affine_matrix, float* parray, int max_objects)
 {
-    dim3 block = block_dims(max_objects);
-    dim3 grid = grid_dims(max_objects);
+    dim3 block = block_dims(num_bboxes);
+    dim3 grid = grid_dims(num_bboxes);
     decode_kernel << < grid, block >> > (predict, num_bboxes, num_class, confidence_threshold, invert_affine_matrix, parray, max_objects);
 }
 
@@ -112,7 +110,6 @@ static __device__ float box_iou(
     float c_area = max(cright - cleft, 0.0f) * max(cbottom - ctop, 0.0f);
     if (c_area == 0.0f)
         return 0.0f;
-
     float a_area = max(0.0f, aright - aleft) * max(0.0f, abottom - atop);
     float b_area = max(0.0f, bright - bleft) * max(0.0f, bbottom - btop);
     return c_area / (a_area + b_area - c_area);
@@ -156,86 +153,65 @@ void app::nms_kernel_invoker(float* parray, float nms_threshold, int max_objects
 }
 
 
-
-
 __global__ void warpaffine_kernel(
-    float* src, int src_line_size, int src_width,
+    uint8_t* src, int src_line_size, int src_width,
     int src_height, float* dst, int dst_width,
     int dst_height, uint8_t const_value_st,
-    float* d2i, int edge) {
+    float* d2s, int edge) {
     int position = blockDim.x * blockIdx.x + threadIdx.x;
     if (position >= edge) return;
 
-    float m_x1 = d2i[0];
-    float m_y1 = d2i[1];
-    float m_z1 = d2i[2];
-    float m_x2 = d2i[3];
-    float m_y2 = d2i[4];
-    float m_z2 = d2i[5];
+    float m_x1 = d2s[0];
+    float m_y1 = d2s[1];
+    float m_z1 = d2s[2];
+    float m_x2 = d2s[3];
+    float m_y2 = d2s[4];
+    float m_z2 = d2s[5];
 
     int dx = position % dst_width;
     int dy = position / dst_width;
-    float src_x = m_x1 * dx + m_y1 * dy + m_z1 ;
-    float src_y = m_x2 * dx + m_y2 * dy + m_z2 ;
+    float src_x = m_x1 * dx + m_y1 * dy + m_z1;
+    float src_y = m_x2 * dx + m_y2 * dy + m_z2;
     float c0, c1, c2;
+
+
     if (src_x <= -1 || src_x >= src_width || src_y <= -1 || src_y >= src_height) {
-        // out of range
         c0 = const_value_st;
         c1 = const_value_st;
         c2 = const_value_st;
     }
     else {
-        //双线性插值
-        //向下取整
-        int y_low = floorf(src_y);
         int x_low = floorf(src_x);
-        int y_high = y_low + 1;
+        int y_low = floorf(src_y);
         int x_high = x_low + 1;
+        int y_high = y_low + 1;
 
-        float const_value[] = { const_value_st, const_value_st, const_value_st };
+
         float ly = src_y - y_low;
         float lx = src_x - x_low;
         float hy = 1 - ly;
         float hx = 1 - lx;
         float w1 = hy * hx, w2 = hy * lx, w3 = ly * hx, w4 = ly * lx;
-        float* v1 = const_value;
-        float* v2 = const_value;
-        float* v3 = const_value;
-        float* v4 = const_value;
-
-        if (y_low >= 0) {
-            if (x_low >= 0)
-                v1 = src + y_low * src_line_size + x_low * 3;
-
-            if (x_high < src_width)
-                v2 = src + y_low * src_line_size + x_high * 3;
-        }
-
-        if (y_high < src_height) {
-            if (x_low >= 0)
-                v3 = src + y_high * src_line_size + x_low * 3;
-
-            if (x_high < src_width)
-                v4 = src + y_high * src_line_size + x_high * 3;
-        }
-
-        c0 = floorf(w1 * v1[0] + w2 * v2[0] + w3 * v3[0] + w4 * v4[0] + 0.5f);
-        c1 = floorf(w1 * v1[1] + w2 * v2[1] + w3 * v3[1] + w4 * v4[1] + 0.5f);
-        c2 = floorf(w1 * v1[2] + w2 * v2[2] + w3 * v3[2] + w4 * v4[2] + 0.5f);
+        uint8_t* v1 = src + y_low * src_line_size + x_low * 3;
+        uint8_t* v2 = src + y_low * src_line_size + x_high * 3;
+        uint8_t* v3 = src + y_high * src_line_size + x_low * 3;
+        uint8_t* v4 = src + y_high * src_line_size + x_high * 3;
+        c0 = w1 * v1[0] + w2 * v2[0] + w3 * v3[0] + w4 * v4[0];
+        c1 = w1 * v1[1] + w2 * v2[1] + w3 * v3[1] + w4 * v4[1];
+        c2 = w1 * v1[2] + w2 * v2[2] + w3 * v3[2] + w4 * v4[2];
     }
-
-    //bgr to rgb 
-    float t = c2;
+    // bgr -> rgb
+    float temp = c2;
     c2 = c0;
-    c0 = t;
+    c0 = temp;
 
-    //normalization
-    c0 = c0 / 255.0f;
-    c1 = c1 / 255.0f;
-    c2 = c2 / 255.0f;
+    //// normalization
+    c0 /= 255.0f;
+    c1 /= 255.0f;
+    c2 /= 255.0f;
 
-    //rgbrgbrgb to rrrgggbbb
-    int area = dst_width * dst_height;
+    // rgbrgbrgb -> rrrgggbbb
+    int area = dst_height * dst_width;
     float* pdst_c0 = dst + dy * dst_width + dx;
     float* pdst_c1 = pdst_c0 + area;
     float* pdst_c2 = pdst_c1 + area;
@@ -246,7 +222,7 @@ __global__ void warpaffine_kernel(
 
 
 void app::preprocess_kernel_img(
-    float* src, int src_width, int src_height,
+    uint8_t* src, int src_width, int src_height,
     float* dst, int dst_width, int dst_height,
     float* d2i, cudaStream_t stream) {
     int all = dst_width * dst_height;

@@ -12,15 +12,14 @@ namespace app {
     class yolo :public IModel<void>
     {
     private:
-        float* affine_matrix_d2i_host ;
         float* affine_matrix_d2i_device;
-        float* cuda_host_img;
-        float* cuda_device_img;
+        uint8_t* cuda_device_img;
         float* cuda_transpose;
         float* buffers[2];
         int width;
         int height;
         float* decode_ptr_device;
+        float* decode_ptr_host;
         cv::Size tergetsize;
     public:
         int num_classes = 80;
@@ -28,7 +27,6 @@ namespace app {
         float bbox_conf_thresh = 0.5;
         int max_objects = 1024;
         int nms_thresh = 0.3;
-        float* decode_ptr_host;
     public:
 
         yolo();

@@ -44,7 +44,7 @@ namespace trt {
 		int net_num_layers = network->getNbLayers();
 
 		builder->setMaxBatchSize(1);
-		config->setMaxWorkspaceSize(4 << 30);
+		config->setMaxWorkspaceSize(1<< 30);
 		ICudaEngine* engine = builder->buildEngineWithConfig(*network, *config);
 		assert(engine);
 
