@@ -168,8 +168,9 @@
     </CudaCompile>
     <ClCompile Include="src\app\common\cuda_common.cpp" />
     <ClCompile Include="src\app\model\IModel.cpp" />
+    <ClCompile Include="src\app\segment\normal\main.cpp" />
+    <ClCompile Include="src\app\segment\simple\main.cpp" />
     <ClCompile Include="src\export\findlinexport.cpp" />
-    <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\app\find_line\findline.cpp" />
     <ClCompile Include="src\common\common.cpp" />
     <ClCompile Include="src\trt\builder\trt_builder.cpp" />
@@ -179,8 +180,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\app\common\object_detetion.h" />
+    <ClInclude Include="src\app\segment\normal\include\common.hpp" />
+    <ClInclude Include="src\app\segment\normal\include\yolov8-seg.hpp" />
+    <ClInclude Include="src\app\segment\simple\include\common.hpp" />
+    <ClInclude Include="src\app\segment\simple\include\yolov8-seg.hpp" />
     <ClInclude Include="src\app\yolov8\decode_kernel.h" />
     <ClInclude Include="src\app\model\IModel.h" />
+    <ClInclude Include="src\cuda\cuda_common.h" />
     <ClInclude Include="src\export\findlinexport.h" />
     <ClInclude Include="src\app\find_line\findline.h" />
     <ClInclude Include="src\trt\commom\trt_common.h" />

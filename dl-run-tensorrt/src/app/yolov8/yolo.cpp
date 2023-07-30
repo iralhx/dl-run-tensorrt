@@ -48,17 +48,17 @@ namespace app {
         IModel::dispose();
     };
 
-    void yolo::forwork(cv::Mat& img) {
+    std::vector<Box> yolo::forwork(cv::Mat& img) {
         affine_matrix afmt;
         cv::Size from(img.cols, img.rows);
         get_affine_martrix(afmt, tergetsize, from);
         cudaMemcpyAsync(affine_matrix_d2i_device, afmt.d2i, sizeof(afmt.d2i), cudaMemcpyHostToDevice, stream);
 
         cudaMemcpyAsync(cuda_device_img, img.data, img.cols * img.rows * 3, cudaMemcpyHostToDevice, stream);
-        cudaStreamSynchronize(stream);
+        CHECK(cudaStreamSynchronize(stream));
 
         preprocess_kernel_img(cuda_device_img, img.cols, img.rows, buffers[0], width, height, affine_matrix_d2i_device, stream);  // cuda前处理 letter_box
-        cudaStreamSynchronize(stream);
+        CHECK(cudaStreamSynchronize(stream));
 
         bool resute = context->executeV2((void**)buffers);
         assert(resute);
@@ -69,7 +69,7 @@ namespace app {
         decode_result(cuda_transpose, output_candidates, num_classes, bbox_conf_thresh, affine_matrix_d2i_device, decode_ptr_device, max_objects); //后处理 cuda
         nms_kernel_invoker(decode_ptr_device, nms_thresh, max_objects);//cuda nms          
         cudaMemcpyAsync(decode_ptr_host, decode_ptr_device, sizeof(float) * (1 + max_objects * 7), cudaMemcpyDeviceToHost, stream);
-        cudaStreamSynchronize(stream);
+        CHECK(cudaStreamSynchronize(stream));
 
         std::vector<app::Box> boxes;
 
@@ -93,7 +93,7 @@ namespace app {
                 boxes.push_back(box);
             }
         }
-        
+        return boxes;
         //for (int i = 0; i < boxes_count; i++)
         //{
         //    cv::Rect roi_area(boxes[i].left, boxes[i].top, boxes[i].right - boxes[i].left, boxes[i].bottom - boxes[i].top);

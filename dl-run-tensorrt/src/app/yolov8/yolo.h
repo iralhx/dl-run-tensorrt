@@ -9,7 +9,10 @@
 #define MAX_IMAGE_INPUT_SIZE_THRESH 2000 * 2000
 
 namespace app {
-    class yolo :public IModel<void>
+    
+
+
+    class yolo :public IModel<std::vector<Box>>
     {
     private:
         float* affine_matrix_d2i_device;
@@ -33,7 +36,7 @@ namespace app {
         ~yolo();
         yolo(const std::string& path);
 
-        void forwork(cv::Mat& img);
+        std::vector<Box> forwork(cv::Mat& img);
         void init();
 
     protected:

@@ -1,5 +1,5 @@
 #pragma once
-
+#include<common/common.h>
 #include <iostream>
 #include <NvInferRuntimeCommon.h>
 
@@ -28,8 +28,6 @@ namespace trt {
 	};
 
 	static Logger gLogger;
-
-
 
 	void set_device(int device_id);
 };

@@ -7,6 +7,7 @@
 #include<common/common.h>
 #include<trt/commom/trt_common.h>
 #include<fstream>
+#include<cuda/cuda_common.h>
 using namespace nvinfer1;
 
 template<typename T>
@@ -61,10 +62,10 @@ protected:
 
 	virtual void dispose()
 	{
-		//context->destroy();
-		/*engine->destroy();
+		context->destroy();
+		engine->destroy();
 		runtime->destroy();
-		cudaStreamDestroy(stream);*/
+		cudaStreamDestroy(stream);
 	};
 };
 

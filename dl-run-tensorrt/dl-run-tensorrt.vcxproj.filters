@@ -24,9 +24,6 @@
     <ClCompile Include="src\app\yolov8\yolo.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\Main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\common\common.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -43,6 +40,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\app\common\cuda_common.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\segment\normal\main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\segment\simple\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -75,6 +78,21 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\app\yolov8\decode_kernel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cuda\cuda_common.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\segment\normal\include\common.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\segment\normal\include\yolov8-seg.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\segment\simple\include\common.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\segment\simple\include\yolov8-seg.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
