@@ -5,8 +5,8 @@
 #include <cassert>
 #include<trt/commom/trt_common.h>
 #include<app/find_line/findline.h>
-#include<app/yolov8/yolo.h>
-#include<app/yolov8/decode_kernel.h>
+#include<app/yolo/yolov8/detection/yolov8.h>
+#include<app/yolo/yolov8/decode_kernel.h>
 
 int main()
 {
@@ -53,7 +53,7 @@ int main()
 
 	//worker(save_file, imagefile);
 
-	app::yolo yolo(save_file);
+	app::yolov8 yolo(save_file);
 
 
 

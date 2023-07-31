@@ -163,11 +163,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <CudaCompile Include="src\app\common\cuda_common.h" />
-    <CudaCompile Include="src\app\yolov8\decode_kernel.cu">
+    <CudaCompile Include="src\app\yolo\yolov8\decode_kernel.cu">
       <FileType>CppCode</FileType>
     </CudaCompile>
     <ClCompile Include="src\app\common\cuda_common.cpp" />
     <ClCompile Include="src\app\model\IModel.cpp" />
+    <ClCompile Include="src\app\yolo\yolo.cpp" />
+    <ClCompile Include="src\app\yolo\yolov8\segment\yolov8seg.cpp" />
     <ClCompile Include="src\export\findlinexport.cpp" />
     <ClCompile Include="src\app\find_line\findline.cpp" />
     <ClCompile Include="src\common\common.cpp" />
@@ -175,12 +177,16 @@
     <ClCompile Include="src\trt\builder\trt_builder.cpp" />
     <ClCompile Include="src\trt\commom\trt_common.cpp" />
     <ClCompile Include="src\trt\infer\trt_infer.cpp" />
-    <ClCompile Include="src\app\yolov8\yolo.cpp" />
+    <ClCompile Include="src\app\yolo\yolov8\detection\yolov8.cpp" />
+    <CudaCompile Include="src\app\yolo\yolov8\detection\yolov8_kernel.cu" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\app\common\object_detetion.h" />
-    <ClInclude Include="src\app\yolov8\decode_kernel.h" />
+    <ClInclude Include="src\app\yolo\yolov8\decode_kernel.h" />
     <ClInclude Include="src\app\model\IModel.h" />
+    <ClInclude Include="src\app\yolo\yolo.h" />
+    <ClInclude Include="src\app\yolo\yolov8\detection\yolov8_kernel.h" />
+    <ClInclude Include="src\app\yolo\yolov8\segment\yolov8seg.h" />
     <ClInclude Include="src\cuda\cuda_common.h" />
     <ClInclude Include="src\export\findlinexport.h" />
     <ClInclude Include="src\app\find_line\findline.h" />
@@ -188,7 +194,7 @@
     <ClInclude Include="src\common\common.h" />
     <ClInclude Include="src\trt\builder\trt_builder.h" />
     <ClInclude Include="src\trt\infer\trt_infer.h" />
-    <ClInclude Include="src\app\yolov8\yolo.h" />
+    <ClInclude Include="src\app\yolo\yolov8\detection\yolov8.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

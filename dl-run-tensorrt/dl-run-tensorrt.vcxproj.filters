@@ -21,7 +21,7 @@
     <ClCompile Include="src\trt\infer\trt_infer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\app\yolov8\yolo.cpp">
+    <ClCompile Include="src\app\yolo\yolov8\detection\yolov8.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\common\common.cpp">
@@ -45,6 +45,12 @@
     <ClCompile Include="src\Main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\app\yolo\yolov8\segment\yolov8seg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\yolo\yolo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\trt\builder\trt_builder.h">
@@ -53,7 +59,7 @@
     <ClInclude Include="src\trt\infer\trt_infer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\app\yolov8\yolo.h">
+    <ClInclude Include="src\app\yolo\yolov8\detection\yolov8.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\common\common.h">
@@ -74,17 +80,27 @@
     <ClInclude Include="src\app\common\object_detetion.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\app\yolov8\decode_kernel.h">
+    <ClInclude Include="src\app\yolo\yolov8\decode_kernel.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\cuda\cuda_common.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\app\yolo\yolo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\yolo\yolov8\segment\yolov8seg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\yolo\yolov8\detection\yolov8_kernel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="src\app\yolov8\decode_kernel.cu">
+    <CudaCompile Include="src\app\yolo\yolov8\decode_kernel.cu">
       <Filter>源文件</Filter>
     </CudaCompile>
     <CudaCompile Include="src\app\common\cuda_common.h" />
+    <CudaCompile Include="src\app\yolo\yolov8\detection\yolov8_kernel.cu" />
   </ItemGroup>
 </Project>

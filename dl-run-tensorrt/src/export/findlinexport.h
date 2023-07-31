@@ -1,6 +1,6 @@
 #pragma once
 #include<app/find_line/findline.h>
-#include<app/yolov8/yolo.h>
+#include<app/yolo/yolov8/detection/yolov8.h>
 
 extern "C" __declspec(dllexport) IModel<cv::Mat>* _cdecl create_findline(const char* path) 
 {
@@ -10,7 +10,7 @@ extern "C" __declspec(dllexport) IModel<cv::Mat>* _cdecl create_findline(const c
 
 extern "C" __declspec(dllexport) IModel<std::vector<app::Box>>*_cdecl create_yolov8(const char* path)
 {
-	return new app::yolo(path);
+	return new app::yolov8(path);
 }
 
 

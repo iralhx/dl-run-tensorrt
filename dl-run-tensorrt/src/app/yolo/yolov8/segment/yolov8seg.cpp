@@ -1,43 +1,20 @@
 #pragma once
 #include<app/model/IModel.h>
-#include"yolo.h"
+#include"yolov8seg.h"
 
-
-struct affine_matrix  //前处理仿射变换矩阵和逆矩阵
-{
-    float i2d[6];   //仿射变换正矩阵
-    float d2i[6];   //仿射变换逆矩阵
-
-};
-
-void get_affine_martrix(affine_matrix& afmt, cv::Size& to, cv::Size& from)  //计算放射变换的正矩阵和逆矩阵
-{
-    float scale = std::min(to.width / (float)from.width, to.height / (float)from.height);
-    afmt.i2d[0] = scale;
-    afmt.i2d[1] = 0;
-    afmt.i2d[2] = (-scale * from.width + to.width) * 0.5;
-    afmt.i2d[3] = 0;
-    afmt.i2d[4] = scale;
-    afmt.i2d[5] = (-scale * from.height + to.height) * 0.5;
-    cv::Mat  cv_i2d(2, 3, CV_32F, afmt.i2d);
-    cv::Mat  cv_d2i(2, 3, CV_32F, afmt.d2i);
-    cv::invertAffineTransform(cv_i2d, cv_d2i);         //通过opencv获取仿射变换逆矩阵
-    memcpy(afmt.d2i, cv_d2i.ptr<float>(0), sizeof(afmt.d2i));
-}
 namespace app {
 
-
-    yolo::yolo() = default;
-    yolo::~yolo() {
+    yolov8seg::yolov8seg() = default;
+    yolov8seg::~yolov8seg() {
         dispose();
         IModel::dispose();
     };
 
-    yolo::yolo(const std::string& path) {
+    yolov8seg::yolov8seg(const std::string& path) {
         modelpath = path;
         init();
     };
-    void yolo::dispose() {
+    void yolov8seg::dispose() {
         cudaFree(buffers[0]);
         cudaFree(buffers[1]);
         cudaFree(decode_ptr_device);
@@ -48,7 +25,7 @@ namespace app {
         IModel::dispose();
     };
 
-    std::vector<Box> yolo::forwork(cv::Mat& img) {
+    void yolov8seg::forwork(cv::Mat& img) {
         affine_matrix afmt;
         cv::Size from(img.cols, img.rows);
         get_affine_martrix(afmt, tergetsize, from);
@@ -63,10 +40,10 @@ namespace app {
         bool resute = context->executeV2((void**)buffers);
         assert(resute);
 
-        transposeDevice(buffers[1], num_classes+4, output_candidates, cuda_transpose);
+        transposeDevice(buffers[1], dim_output.d[1], dim_output.d[2], cuda_transpose);
 
 
-        decode_result(cuda_transpose, output_candidates, num_classes, bbox_conf_thresh, affine_matrix_d2i_device, decode_ptr_device, max_objects); //后处理 cuda
+        //decode_result(cuda_transpose, output_candidates, num_classes, bbox_conf_thresh, affine_matrix_d2i_device, decode_ptr_device, max_objects); //后处理 cuda
         nms_kernel_invoker(decode_ptr_device, nms_thresh, max_objects);//cuda nms          
         cudaMemcpyAsync(decode_ptr_host, decode_ptr_device, sizeof(float) * (1 + max_objects * 7), cudaMemcpyDeviceToHost, stream);
         CHECK(cudaStreamSynchronize(stream));
@@ -93,7 +70,7 @@ namespace app {
                 boxes.push_back(box);
             }
         }
-        return boxes;
+
         //for (int i = 0; i < boxes_count; i++)
         //{
         //    cv::Rect roi_area(boxes[i].left, boxes[i].top, boxes[i].right - boxes[i].left, boxes[i].bottom - boxes[i].top);
@@ -105,7 +82,7 @@ namespace app {
     };
 
 
-    void yolo::init() {
+    void yolov8seg::init() {
         IModel::init();
 
         cudaMalloc(&affine_matrix_d2i_device, sizeof(float) * 6);
@@ -116,18 +93,26 @@ namespace app {
         height = in_dims.d[2];
         width = in_dims.d[3];
 
-        cv::Size  tergetsize (width,height );
+        cv::Size  tergetsize(width, height);
         this->tergetsize = tergetsize;
-        auto out_dims = engine->getTensorShape("output0");
+        dim_output = engine->getTensorShape("output0");
         auto output_size = 1;
 
-        for (int j = 0; j < out_dims.nbDims; j++) {
-            output_size *= out_dims.d[j];
+        for (int j = 0; j < dim_output.nbDims; j++) {
+            output_size *= dim_output.d[j];
+        }
+
+        dim_mask = engine->getTensorShape("output1");
+
+        auto output_mask_size = 1;
+        for (int j = 0; j < dim_mask.nbDims; j++) {
+            output_mask_size *= dim_mask.d[j];
         }
 
         nms_thresh = 0.3;
-        cudaMalloc((void**)&buffers[0], 3 * height* width * sizeof(float));
+        cudaMalloc((void**)&buffers[0], 3 * height * width * sizeof(float));
         cudaMalloc((void**)&buffers[1], output_size * sizeof(float));
+        cudaMalloc((void**)&buffers[2], output_mask_size * sizeof(float));
         cudaMalloc(&cuda_transpose, output_size * sizeof(float));
         cudaMalloc(&cuda_device_img, 3 * MAX_IMAGE_INPUT_SIZE_THRESH);
     };
