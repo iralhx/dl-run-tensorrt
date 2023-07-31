@@ -3,10 +3,7 @@
 #include <iostream>
 #include <cuda_runtime.h>
 #include"yolov8_kernel.h"
-static __device__ void affine_project(float* matrix, float x, float y, float* ox, float* oy) {
-    *ox = matrix[0] * x + matrix[1] * y + matrix[2];
-    *oy = matrix[3] * x + matrix[4] * y + matrix[5];
-}
+
 
 //前四个是坐标，后面全部是置信度
 static __global__ void decode_kernel(float* predict, int num_bboxes, int num_classes, float confidence_threshold, float* invert_affine_matrix, float* parray, int max_objects) {

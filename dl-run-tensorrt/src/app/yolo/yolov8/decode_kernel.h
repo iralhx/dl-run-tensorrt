@@ -4,6 +4,10 @@
 // left, top, right, bottom, confidence, class, keepflag
 #define NUM_BOX_ELEMENT  8
 
+static __host__ __device__ void affine_project(float* matrix, float x, float y, float* ox, float* oy) {
+	*ox = matrix[0] * x + matrix[1] * y + matrix[2];
+	*oy = matrix[3] * x + matrix[4] * y + matrix[5];
+}
 
 
 namespace app {

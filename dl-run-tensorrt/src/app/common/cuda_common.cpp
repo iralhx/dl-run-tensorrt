@@ -10,6 +10,7 @@ bool __check_cuda_runtime(cudaError_t code, const char* op, const char* file, in
 	return true;
 }
 
+
 dim3 grid_dims(int numJobs) {
     int numBlockThreads = numJobs < GPU_BLOCK_THREADS ? numJobs : GPU_BLOCK_THREADS;
     return dim3(((numJobs + numBlockThreads - 1) / (float)numBlockThreads));

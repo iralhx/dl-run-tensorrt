@@ -51,6 +51,9 @@
     <ClCompile Include="src\app\yolo\yolo.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\app\yolo\yolov8\segment\yolov8seg_kernel.h">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\trt\builder\trt_builder.h">
@@ -102,5 +105,6 @@
     </CudaCompile>
     <CudaCompile Include="src\app\common\cuda_common.h" />
     <CudaCompile Include="src\app\yolo\yolov8\detection\yolov8_kernel.cu" />
+    <CudaCompile Include="src\app\yolo\yolov8\segment\yolov8seg_kernel.cu" />
   </ItemGroup>
 </Project>

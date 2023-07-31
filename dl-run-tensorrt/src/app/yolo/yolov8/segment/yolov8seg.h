@@ -17,6 +17,7 @@ namespace app {
     {
     private:
         float* affine_matrix_d2i_device;
+        float* affine_matrix_i2d_device;
         uint8_t* cuda_device_img;
         float* cuda_transpose;
         float* buffers[3];

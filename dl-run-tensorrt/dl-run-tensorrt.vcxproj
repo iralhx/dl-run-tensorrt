@@ -170,6 +170,7 @@
     <ClCompile Include="src\app\model\IModel.cpp" />
     <ClCompile Include="src\app\yolo\yolo.cpp" />
     <ClCompile Include="src\app\yolo\yolov8\segment\yolov8seg.cpp" />
+    <ClCompile Include="src\app\yolo\yolov8\segment\yolov8seg_kernel.h" />
     <ClCompile Include="src\export\findlinexport.cpp" />
     <ClCompile Include="src\app\find_line\findline.cpp" />
     <ClCompile Include="src\common\common.cpp" />
@@ -179,6 +180,7 @@
     <ClCompile Include="src\trt\infer\trt_infer.cpp" />
     <ClCompile Include="src\app\yolo\yolov8\detection\yolov8.cpp" />
     <CudaCompile Include="src\app\yolo\yolov8\detection\yolov8_kernel.cu" />
+    <CudaCompile Include="src\app\yolo\yolov8\segment\yolov8seg_kernel.cu" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\app\common\object_detetion.h" />

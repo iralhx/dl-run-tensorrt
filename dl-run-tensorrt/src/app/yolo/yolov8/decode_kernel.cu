@@ -30,11 +30,6 @@ void app::transposeDevice(float* src, int dim1, int dim2, float* dst)
 }
 
 
-static __device__ void affine_project(float* matrix, float x, float y, float* ox, float* oy) {
-    *ox = matrix[0] * x + matrix[1] * y + matrix[2];
-    *oy = matrix[3] * x + matrix[4] * y + matrix[5];
-}
-
 
 static __device__ float box_iou(
     float aleft, float atop, float aright, float abottom,

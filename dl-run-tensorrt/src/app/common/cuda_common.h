@@ -7,6 +7,14 @@
 
 #define checkRuntime(op)  __check_cuda_runtime((op), #op, __FILE__, __LINE__)
 
+#define checkKernel(...)                 \
+  do {                                   \
+    { (__VA_ARGS__); }                   \
+    checkRuntime(cudaPeekAtLastError()); \
+  } while (0)
+
+
+
 bool __check_cuda_runtime(cudaError_t code, const char* op, const char* file, int line);
 
 #define GPU_BLOCK_THREADS 512
