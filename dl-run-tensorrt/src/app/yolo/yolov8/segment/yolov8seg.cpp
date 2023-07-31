@@ -1,6 +1,7 @@
 #pragma once
 #include<app/model/IModel.h>
 #include"yolov8seg.h"
+#include"yolov8seg_kernel.h"
 
 namespace app {
 
@@ -43,7 +44,7 @@ namespace app {
         transposeDevice(buffers[1], dim_output.d[1], dim_output.d[2], cuda_transpose);
 
 
-        //decode_result(cuda_transpose, output_candidates, num_classes, bbox_conf_thresh, affine_matrix_d2i_device, decode_ptr_device, max_objects); //后处理 cuda
+        decode_result(cuda_transpose, output_candidates, num_classes, bbox_conf_thresh, affine_matrix_d2i_device, decode_ptr_device, max_objects); //后处理 cuda
         nms_kernel_invoker(decode_ptr_device, nms_thresh, max_objects);//cuda nms          
         cudaMemcpyAsync(decode_ptr_host, decode_ptr_device, sizeof(float) * (1 + max_objects * 7), cudaMemcpyDeviceToHost, stream);
         CHECK(cudaStreamSynchronize(stream));
