@@ -53,7 +53,7 @@ static __global__ void decode_kernel(float* predict, int num_bboxes, int num_cla
     *pout_item++ = confidence;
     *pout_item++ = label;
     *pout_item++ = 1; // 1 = keep, 0 = ignore
-    *pout_item++ = pitem[4 + num_classes];//这里是mask的位置
+    *pout_item++ = position;//这里是mask的位置
 }
 
 void app::decode_seg_result(float* predict, int num_bboxes, int num_class,int sun_mask, float confidence_threshold, float* invert_affine_matrix, float* parray, int max_objects)

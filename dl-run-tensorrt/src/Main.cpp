@@ -20,8 +20,8 @@ int main()
 	std::string onnx_file = "./../yolov8n.onnx";
 	std::string save_file = "./../yolov8n.engine";
 
-	std::string onnx_file_seg = "./../yolov8n-seg.onnx";
-	std::string save_file_seg = "./../yolov8n-seg.engine";
+	std::string onnx_file_seg = "./../yolov8l-seg.onnx";
+	std::string save_file_seg = "./../yolov8l-seg.engine";
 	std::string imagefile = "./../bus1.jpg";
 	if (!common:: fileExists(save_file))
 	{
