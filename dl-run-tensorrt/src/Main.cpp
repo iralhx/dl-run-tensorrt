@@ -17,19 +17,24 @@ int main()
 
 	trt::set_device(0);
 
+	std::string onnx_file = "./../yolov8n.onnx";
+	std::string save_file = "./../yolov8n.engine";
 
-	std::string onnx_file = "./../yolov8n-seg.onnx";
-	std::string save_file = "./../yolov8n-seg.engine";
+	std::string onnx_file_seg = "./../yolov8n-seg.onnx";
+	std::string save_file_seg = "./../yolov8n-seg.engine";
 	std::string imagefile = "./../bus1.jpg";
 	if (!common:: fileExists(save_file))
 	{
 		trt:: onnx2trt(onnx_file, save_file);
 	}
-
+	if (!common::fileExists(save_file_seg))
+	{
+		trt::onnx2trt(onnx_file_seg, save_file_seg);
+	}
 
 	//worker(save_file, imagefile);
 
-	app::yolov8seg yolo(save_file);
+	app::yolov8seg yolo(save_file_seg);
 
 
 

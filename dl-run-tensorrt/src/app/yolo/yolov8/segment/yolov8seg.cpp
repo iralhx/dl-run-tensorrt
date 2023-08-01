@@ -55,7 +55,7 @@ namespace app {
 
         for (int i = 0; i < count; i++)
         {
-            int basic_pos = 1 + i * 7;
+            int basic_pos = 1 + i * NUM_BOX_ELEMENT;
             int keep_flag = decode_ptr_host[basic_pos + 6];
             if (keep_flag == 1)
             {
@@ -110,8 +110,8 @@ namespace app {
 
         cudaMalloc(&affine_matrix_d2i_device, sizeof(float) * 6);
         cudaMalloc(&affine_matrix_i2d_device, sizeof(float) * 6);
-        cudaMalloc(&decode_ptr_device, sizeof(float) * (1 + max_objects * 7));
-        decode_ptr_host = new float[1 + max_objects * 7];
+        cudaMalloc(&decode_ptr_device, sizeof(float) * (1 + max_objects * NUM_BOX_ELEMENT));
+        decode_ptr_host = new float[1 + max_objects * NUM_BOX_ELEMENT];
 
         Dims in_dims = engine->getTensorShape("images");
         height = in_dims.d[2];
@@ -135,8 +135,8 @@ namespace app {
 
         nms_thresh = 0.3;
         cudaMalloc((void**)&buffers[0], 3 * height * width * sizeof(float));
-        cudaMalloc((void**)&buffers[2], output_size * sizeof(float));
-        cudaMalloc((void**)&buffers[1], output_mask_size * sizeof(float));
+        cudaMalloc((void**)&buffers[1], output_size * sizeof(float));
+        cudaMalloc((void**)&buffers[2], output_mask_size * sizeof(float));
         cudaMalloc(&cuda_transpose, output_size * sizeof(float));
         cudaMalloc(&cuda_device_img, 3 * MAX_IMAGE_INPUT_SIZE_THRESH);
     };

@@ -46,7 +46,7 @@ namespace app {
 
         decode_result(cuda_transpose, output_candidates, num_classes, bbox_conf_thresh, affine_matrix_d2i_device, decode_ptr_device, max_objects); //∫Û¥¶¿Ì cuda
         nms_kernel_invoker(decode_ptr_device, nms_thresh, max_objects);//cuda nms          
-        cudaMemcpyAsync(decode_ptr_host, decode_ptr_device, sizeof(float) * (1 + max_objects * 7), cudaMemcpyDeviceToHost, stream);
+        cudaMemcpyAsync(decode_ptr_host, decode_ptr_device, sizeof(float) * (1 + max_objects * NUM_BOX_ELEMENT), cudaMemcpyDeviceToHost, stream);
         CHECK(cudaStreamSynchronize(stream));
 
         std::vector<app::Box> boxes;
@@ -56,7 +56,7 @@ namespace app {
 
         for (int i = 0; i < count; i++)
         {
-            int basic_pos = 1 + i * 7;
+            int basic_pos = 1 + i * NUM_BOX_ELEMENT;
             int keep_flag = decode_ptr_host[basic_pos + 6];
             if (keep_flag == 1)
             {
@@ -71,15 +71,15 @@ namespace app {
                 boxes.push_back(box);
             }
         }
+        for (int i = 0; i < boxes_count; i++)
+        {
+            cv::Rect roi_area(boxes[i].left, boxes[i].top, boxes[i].right - boxes[i].left, boxes[i].bottom - boxes[i].top);
+            cv::rectangle(img, roi_area, cv::Scalar(0, 255, 0), 2);
+            std::string  label_string = std::to_string((int)boxes[i].class_label) + " " + std::to_string(boxes[i].confidence);
+            cv::putText(img, label_string, cv::Point(boxes[i].left, boxes[i].top - 1), cv::FONT_HERSHEY_PLAIN, 1.2, cv::Scalar(0xFF, 0xFF, 0xFF), 2);
+        }
+        cv::imwrite("../image_name.jpg", img);
         return boxes;
-        //for (int i = 0; i < boxes_count; i++)
-        //{
-        //    cv::Rect roi_area(boxes[i].left, boxes[i].top, boxes[i].right - boxes[i].left, boxes[i].bottom - boxes[i].top);
-        //    cv::rectangle(img, roi_area, cv::Scalar(0, 255, 0), 2);
-        //    std::string  label_string = std::to_string((int)boxes[i].class_label) + " " + std::to_string(boxes[i].confidence);
-        //    cv::putText(img, label_string, cv::Point(boxes[i].left, boxes[i].top - 1), cv::FONT_HERSHEY_PLAIN, 1.2, cv::Scalar(0xFF, 0xFF, 0xFF), 2);
-        //}
-        //cv::imwrite("../image_name.jpg", img);
     };
 
 
@@ -87,8 +87,8 @@ namespace app {
         IModel::init();
 
         cudaMalloc(&affine_matrix_d2i_device, sizeof(float) * 6);
-        cudaMalloc(&decode_ptr_device, sizeof(float) * (1 + max_objects * 7));
-        decode_ptr_host = new float[1 + max_objects * 7];
+        cudaMalloc(&decode_ptr_device, sizeof(float) * (1 + max_objects * NUM_BOX_ELEMENT));
+        decode_ptr_host = new float[1 + max_objects * NUM_BOX_ELEMENT];
 
         Dims in_dims = engine->getTensorShape("images");
         height = in_dims.d[2];
