@@ -2,6 +2,13 @@
 #include<app/find_line/findline.h>
 #include<app/yolo/yolov8/detection/yolov8.h>
 #include<app/yolo/yolov8/segment/yolov8seg.h>
+#include<trt/commom/trt_common.h>
+
+extern "C" __declspec(dllexport) void _cdecl set_device(int index)
+{
+	trt::set_device(index);
+}
+
 
 extern "C" __declspec(dllexport) IModel<cv::Mat>* _cdecl create_findline(const char* path) 
 {
@@ -22,9 +29,9 @@ extern "C" __declspec(dllexport) IModel<std::vector<app::Box>>*_cdecl create_yol
 
 
 
-extern "C" __declspec(dllexport) uchar* _cdecl yolov8_forwork(IModel<cv::Mat>*model, cv::Mat & img)
+extern "C" __declspec(dllexport) void _cdecl yolov8_forwork(IModel<cv::Mat>*model, cv::Mat img)
 {
-	return model->forwork(img).ptr();
+	model->forwork(img);
 }
 
 
