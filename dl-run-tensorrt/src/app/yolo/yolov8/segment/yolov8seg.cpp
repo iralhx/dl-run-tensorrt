@@ -24,7 +24,7 @@ namespace app {
         cudaFree(decode_ptr_host);
     };
 
-    void yolov8seg::forwork(cv::Mat& img) {
+    std::vector<Box> yolov8seg::forwork(cv::Mat& img) {
         affine_matrix afmt;
         cv::Size from(img.cols, img.rows);
         get_affine_martrix(afmt, tergetsize, from);
@@ -54,38 +54,19 @@ namespace app {
 
         for (int i = 0; i < count; i++)
         {
-            int basic_pos = 1 + i * NUM_BOX_ELEMENT;
-            int keep_flag = decode_ptr_host[basic_pos + 6];
-            if (keep_flag == 1)
-            {
-                boxes_count += 1;
-                app::Box box;
-                box.left = decode_ptr_host[basic_pos + 0];
-                box.top = decode_ptr_host[basic_pos + 1];
-                box.right = decode_ptr_host[basic_pos + 2];
-                box.bottom = decode_ptr_host[basic_pos + 3];
-                box.confidence = decode_ptr_host[basic_pos + 4];
-                box.class_label = decode_ptr_host[basic_pos + 5];
-                boxes.push_back(box);
-            }
-        }
-        for (int i = 0; i < boxes_count; i++)
-        {
-            cv::Rect roi_area(boxes[i].left, boxes[i].top, boxes[i].right - boxes[i].left, boxes[i].bottom - boxes[i].top);
-            cv::rectangle(img, roi_area, cv::Scalar(0, 255, 0), 2);
-            std::string  label_string = std::to_string((int)boxes[i].class_label) + " " + std::to_string(boxes[i].confidence);
-            cv::putText(img, label_string, cv::Point(boxes[i].left, boxes[i].top - 1), cv::FONT_HERSHEY_PLAIN, 1.2, cv::Scalar(0xFF, 0xFF, 0xFF), 2);
-        }
-        cv::imwrite("../result.jpg", img);
-
-
-
-        for (int i = 0; i < count; i++)
-        {
             float* basic_pos = decode_ptr_host+1 + i * NUM_BOX_ELEMENT;
             int keep_flag = basic_pos[6];
             if (keep_flag == 1)
             {
+                app::Box box;
+                box.left = basic_pos [0];
+                box.top = basic_pos[1];
+                box.right = basic_pos[2];
+                box.bottom = basic_pos[3];
+                box.confidence = basic_pos[4];
+                box.class_label = basic_pos[5];
+                boxes.push_back(box);
+
                 float* mask_head_predict = buffers[1];
                 float left, top, right, bottom;
                 float* i2d = afmt.i2d;
@@ -109,8 +90,6 @@ namespace app {
                     unsigned char* mask_out_host;
                     cudaMalloc(&mask_out_device, mask_out_width * mask_out_height);
                     cudaMallocHost(&mask_out_host, mask_out_width * mask_out_height);
-
-
                     checkKernel( decode_single_mask(left * scale_to_predict_x, top * scale_to_predict_y,
                         mask_weights,
                         mask_head_predict,
@@ -123,8 +102,7 @@ namespace app {
                     CHECK(cudaStreamSynchronize(stream));
 
                     cv::Mat seg(mask_out_height, mask_out_width, CV_8U, mask_out_host);
-                    cv::imwrite("../"+std::to_string(i) + ".jpg", seg);
-
+                    box.segment = &seg;
                 }
 
 
@@ -132,7 +110,7 @@ namespace app {
 
             }
         }
-       
+        return boxes;
 
     };
 
