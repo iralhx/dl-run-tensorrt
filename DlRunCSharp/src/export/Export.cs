@@ -35,7 +35,7 @@ namespace DlRunCSharp
         public static extern int get_vector_box_size(IntPtr vector);
 
         [DllImport(DllName)]
-        public static extern Box get_vector_box(IntPtr vector,int index);
+        public static extern IntPtr get_vector_box(IntPtr vector,int index);
 
     }
 }

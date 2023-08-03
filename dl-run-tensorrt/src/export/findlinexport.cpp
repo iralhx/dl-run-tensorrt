@@ -53,9 +53,12 @@ extern "C" __declspec(dllexport) int _cdecl get_vector_box_size(std::vector<app:
 	return bos->size();
 }
 
-extern "C" __declspec(dllexport) app::Box _cdecl get_vector_box(std::vector<app::Box>*boxs, int index)
+extern "C" __declspec(dllexport) app::Box* _cdecl get_vector_box(std::vector<app::Box>*boxs, int index)
 {
-	app::Box box = (*boxs)[index];
+	app::Box* box = &((*boxs)[index]);
+
+	printf("str:%f", box->left)
+		;
 	return box;
 
 }

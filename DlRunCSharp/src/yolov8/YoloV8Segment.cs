@@ -25,7 +25,8 @@ namespace DlRunCSharp
             Box[] boxs = new Box[count];
             for (int i = 0; i < count; i++)
             {
-                Box box = Export.get_vector_box(boxsPtr, i);
+                IntPtr boxPtr = Export.get_vector_box(boxsPtr, i);
+                Box box=Marshal.PtrToStructure<Box>(boxPtr);
                 boxs[i] = box;
             }
             return boxs;

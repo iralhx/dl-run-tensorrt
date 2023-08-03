@@ -23,6 +23,6 @@ extern "C" __declspec(dllexport) void _cdecl dispose(IModel<cv::Mat>*model);
 
 extern "C" __declspec(dllexport) int _cdecl get_vector_box_size(std::vector<app::Box>*bos);
 
-extern "C" __declspec(dllexport) app::Box _cdecl get_vector_box(std::vector<app::Box>*boxs, int index);
+extern "C" __declspec(dllexport) app::Box* _cdecl get_vector_box(std::vector<app::Box>*boxs, int index);
 
 
