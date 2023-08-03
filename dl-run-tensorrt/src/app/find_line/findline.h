@@ -14,7 +14,7 @@ namespace app {
         }
         findline(const std::string& path);
 
-        cv::Mat forwork(cv::Mat& img);
+        cv::Mat forword(cv::Mat& img);
         void init() override;
 
     protected:

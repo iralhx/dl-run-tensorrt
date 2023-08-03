@@ -19,13 +19,13 @@ namespace DlRunCSharp
 
         public Box[] Forword(Mat mat)
         {
-            IntPtr boxsPtr = Export.yolov8_forword(ptr, mat.CvPtr);
-            int count = Export.get_vector_box_size(boxsPtr);
+            IntPtr boxsPtr = IntPtr.Zero;
+            int count = 0;
+            Export.yolov8_forword(ptr, mat.CvPtr,ref boxsPtr,ref count);
             Box[] boxs = new Box[count];
             for (int i = 0; i < count; i++)
             {
-                IntPtr boxPtr = Export.get_vector_box(boxsPtr, i);
-                Box box = Marshal.PtrToStructure<Box>(boxPtr);
+                Box box = Export.get_vector_box(boxsPtr, i);
                 boxs[i] = box;
             }
             return boxs;

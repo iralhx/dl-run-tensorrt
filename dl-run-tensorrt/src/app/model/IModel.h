@@ -31,7 +31,7 @@ public:
 		dispose();
 	};
 	//自定义的输出
-	virtual T forwork(cv::Mat& img) = 0;
+	virtual T forword(cv::Mat& img) = 0;
 
 	virtual void init()
 	{

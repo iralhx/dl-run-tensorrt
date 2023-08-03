@@ -34,14 +34,14 @@ namespace app {
         int output_candidates = 8400;
         float bbox_conf_thresh = 0.5;
         int max_objects = 1024;
-        int nms_thresh = 0.3;
+        float nms_thresh = 0.3;
     public:
 
         yolov8seg();
         ~yolov8seg();
         yolov8seg(const std::string& path);
 
-        std::vector<Box> forwork(cv::Mat& img);
+        std::vector<Box> forword(cv::Mat& img);
         void init();
 
     protected:

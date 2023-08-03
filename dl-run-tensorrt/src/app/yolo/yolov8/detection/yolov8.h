@@ -37,7 +37,7 @@ namespace app {
         ~yolov8();
         yolov8(const std::string& path);
 
-        std::vector<Box> forwork(cv::Mat& img);
+        std::vector<Box> forword(cv::Mat& img);
         void init();
 
     protected:

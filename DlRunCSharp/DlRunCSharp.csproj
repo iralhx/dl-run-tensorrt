@@ -48,6 +48,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\export\Export.cs" />
     <Compile Include="src\object_detetion\Box.cs" />
+    <Compile Include="src\trt\Trt.cs" />
     <Compile Include="src\yolov8\YoloV8Segment.cs" />
   </ItemGroup>
   <ItemGroup>

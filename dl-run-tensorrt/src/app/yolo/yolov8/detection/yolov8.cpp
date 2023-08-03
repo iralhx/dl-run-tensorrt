@@ -26,7 +26,7 @@ namespace app {
         IModel::dispose();
     };
 
-    std::vector<Box> yolov8::forwork(cv::Mat& img) {
+    std::vector<Box> yolov8::forword(cv::Mat& img) {
         affine_matrix afmt;
         cv::Size from(img.cols, img.rows);
         get_affine_martrix(afmt, tergetsize, from);

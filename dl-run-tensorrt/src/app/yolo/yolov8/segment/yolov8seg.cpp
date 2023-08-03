@@ -24,9 +24,11 @@ namespace app {
         cudaFree(decode_ptr_host);
     };
 
-    std::vector<Box> yolov8seg::forwork(cv::Mat& img) {
+    std::vector<Box> yolov8seg::forword(cv::Mat& img) {
         affine_matrix afmt;
         cv::Size from(img.cols, img.rows);
+
+
         get_affine_martrix(afmt, tergetsize, from);
         cudaMemcpyAsync(affine_matrix_d2i_device, afmt.d2i, sizeof(afmt.d2i), cudaMemcpyHostToDevice, stream);
         cudaMemcpyAsync(affine_matrix_i2d_device, afmt.i2d, sizeof(afmt.i2d), cudaMemcpyHostToDevice, stream);
@@ -65,7 +67,6 @@ namespace app {
                 box.bottom = basic_pos[3];
                 box.confidence = basic_pos[4];
                 box.class_label = basic_pos[5];
-                boxes.push_back(box);
 
                 float* mask_head_predict = buffers[1];
                 float left, top, right, bottom;
@@ -101,15 +102,17 @@ namespace app {
                         cudaMemcpyDeviceToHost, stream));
                     CHECK(cudaStreamSynchronize(stream));
 
-                    cv::Mat seg(mask_out_height, mask_out_width, CV_8U, mask_out_host);
-                    box.segment = &seg;
+                    box.segment= new cv::Mat(mask_out_height, mask_out_width, CV_8U);
+                    memcpy(box.segment->data, mask_out_host, mask_out_width * mask_out_height);
+                    //cv::imwrite(std::to_string(i)+ ".jpg",*box.segment);
+
                 }
-
-
-
+                boxes.push_back(box);
 
             }
         }
+
+
         return boxes;
 
     };

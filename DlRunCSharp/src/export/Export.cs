@@ -13,14 +13,19 @@ namespace DlRunCSharp
 
 
         [DllImport(DllName)]
+        public static extern void set_device(int index);
+
+        [DllImport(DllName)]
         public static extern IntPtr create_findline(string path);
         [DllImport(DllName)]
         public static extern IntPtr create_yolov8_detetion(string path);
         [DllImport(DllName)]
         public static extern IntPtr create_yolov8_segment(string path);
         [DllImport(DllName)]
-        public static extern IntPtr yolov8_forword(IntPtr ptr, IntPtr mat);
-
+        public static extern void yolov8_forword(IntPtr ptr, IntPtr mat,ref IntPtr result,ref int size);
+        
+        [DllImport(DllName)]
+        public static extern int yolov8_segment_weight(IntPtr model);
 
         [DllImport(DllName)]
         public static extern void dispose(IntPtr ptr);
@@ -30,7 +35,7 @@ namespace DlRunCSharp
         public static extern int get_vector_box_size(IntPtr vector);
 
         [DllImport(DllName)]
-        public static extern IntPtr get_vector_box(IntPtr vector,int index);
+        public static extern Box get_vector_box(IntPtr vector,int index);
 
     }
 }

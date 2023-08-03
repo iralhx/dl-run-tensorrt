@@ -8,7 +8,7 @@ namespace app {
         findline::init();
     };
 
-    cv::Mat findline::forwork(cv::Mat& img) {
+    cv::Mat findline::forword(cv::Mat& img) {
         assert(context != nullptr);
         assert(!img.empty());
         //‘§¥¶¿ÌÕº∆¨

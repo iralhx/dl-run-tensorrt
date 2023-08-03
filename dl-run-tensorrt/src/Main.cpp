@@ -9,6 +9,7 @@
 #include<app/yolo/yolov8/decode_kernel.h>
 #include<app/yolo/yolov8/segment/yolov8seg.h>
 #include<app/yolo/yolov8/segment/yolov8seg_kernel.h>
+#include<export/findlinexport.h>
 
 int main()
 {
@@ -37,10 +38,19 @@ int main()
 	app::yolov8seg yolo(save_file_seg);
 
 
-
 	cv::Mat img =  cv::imread(imagefile);
+	std::vector<app::Box> result;
+	int count;
+	yolov8_forword(&yolo, img,result,count);
+	int b =get_vector_box_size(&result);
 
-	yolo.forwork(img);
+
+	//std::vector<app::Box> boxs =  yolo.forword(img);
+	for (size_t i = 0; i < count; i++)
+	{
+		app::Box b = get_vector_box(&result, i);
+		cv::imwrite(std::to_string(i) + ".jpg", *(b.segment));
+	}
 	//cv::imshow("Image with Rectangle", mat);
 	//cv::waitKey(0);
 	//cv::imwrite("./../result1.jpg", mat);
