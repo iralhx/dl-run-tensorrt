@@ -10,7 +10,7 @@ namespace app {
         float bottom;
         float confidence;
         int class_label;
-        cv::Mat* segment;
+        void* segment;
         Box() = default;
 
     };

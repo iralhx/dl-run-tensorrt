@@ -24,11 +24,10 @@ namespace app {
         cudaFree(decode_ptr_host);
     };
 
-    std::vector<Box> yolov8seg::forword(cv::Mat& img) {
+    std::vector<Box>* yolov8seg::forword(cv::Mat& img) {
+        CHECK(cudaEventRecord(start_time));
         affine_matrix afmt;
         cv::Size from(img.cols, img.rows);
-
-
         get_affine_martrix(afmt, tergetsize, from);
         cudaMemcpyAsync(affine_matrix_d2i_device, afmt.d2i, sizeof(afmt.d2i), cudaMemcpyHostToDevice, stream);
         cudaMemcpyAsync(affine_matrix_i2d_device, afmt.i2d, sizeof(afmt.i2d), cudaMemcpyHostToDevice, stream);
@@ -39,9 +38,23 @@ namespace app {
         preprocess_kernel_img(cuda_device_img, img.cols, img.rows, buffers[0], width, height, affine_matrix_d2i_device, stream);  // cuda前处理 letter_box
         CHECK(cudaStreamSynchronize(stream));
 
-        bool resute = context->executeV2((void**)buffers);
-        assert(resute);
+        CHECK(cudaEventRecord(end_time));
+        CHECK(cudaEventSynchronize(end_time));
+        float latency = 0;
+        CHECK(cudaEventElapsedTime(&latency, start_time, end_time));
 
+        printf("前处理: %.5f ms     ", latency);
+
+        CHECK(cudaEventRecord(start_time));
+        bool resute = context->executeV2((void**)buffers);
+        CHECK(cudaEventRecord(end_time));
+        assert(resute);
+        CHECK(cudaEventSynchronize(end_time));
+
+        CHECK(cudaEventElapsedTime(&latency, start_time,end_time));
+
+        printf("预测: %.5f ms     ", latency);
+        CHECK(cudaEventRecord(start_time));
         transposeDevice(buffers[2], dim_output.d[1], dim_output.d[2], cuda_transpose);
 
 
@@ -51,7 +64,7 @@ namespace app {
         CHECK(cudaStreamSynchronize(stream));
 
         int boxes_count = 0;
-        std::vector<app::Box> boxes;
+        std::vector<app::Box>* boxes =new std::vector<app::Box>;
         int count = std::min((int)*decode_ptr_host, max_objects);
 
         for (int i = 0; i < count; i++)
@@ -102,17 +115,23 @@ namespace app {
                         cudaMemcpyDeviceToHost, stream));
                     CHECK(cudaStreamSynchronize(stream));
 
-                    box.segment= new cv::Mat(mask_out_height, mask_out_width, CV_8U);
-                    memcpy(box.segment->data, mask_out_host, mask_out_width * mask_out_height);
+                    cv::Mat* seg= new cv::Mat(mask_out_height, mask_out_width, CV_8U);
+                    memcpy(seg->data, mask_out_host, mask_out_width * mask_out_height);
+                    box.segment = seg;
                     //cv::imwrite(std::to_string(i)+ ".jpg",*box.segment);
 
                 }
-                boxes.push_back(box);
+                boxes->push_back(box);
 
             }
         }
 
+        CHECK(cudaEventRecord(end_time));
 
+        CHECK(cudaEventSynchronize(end_time));
+        CHECK(cudaEventElapsedTime(&latency, start_time,end_time));
+
+        printf("后处理: %.5f ms     ", latency);
         return boxes;
 
     };

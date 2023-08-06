@@ -39,17 +39,19 @@ int main()
 
 
 	cv::Mat img =  cv::imread(imagefile);
-	std::vector<app::Box> result;
+	std::vector<app::Box>* result;
+	result =yolo.forword(img);
 	int count;
-	yolov8_forword(&yolo, img,result,count);
-	int b =get_vector_box_size(&result);
+	result =yolov8_forword(&yolo, img,count);
+	int b =get_vector_box_size(result);
 
 
 	//std::vector<app::Box> boxs =  yolo.forword(img);
 	for (size_t i = 0; i < count; i++)
 	{
-		app::Box b = *(get_vector_box(&result, i));
-		cv::imwrite(std::to_string(i) + ".jpg", *(b.segment));
+		app::Box b = get_vector_box(result, i);
+		cv::Mat* seg=(cv::Mat*)(b.segment);
+		cv::imwrite(std::to_string(i) + ".jpg", *(seg));
 	}
 	//cv::imshow("Image with Rectangle", mat);
 	//cv::waitKey(0);

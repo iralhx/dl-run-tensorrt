@@ -13,7 +13,7 @@ namespace app {
     
 
 
-    class yolov8 :public IModel<std::vector<Box>>
+    class yolov8 :public IModel<std::vector<Box>*>
     {
     private:
         float* affine_matrix_d2i_device;
@@ -37,7 +37,7 @@ namespace app {
         ~yolov8();
         yolov8(const std::string& path);
 
-        std::vector<Box> forword(cv::Mat& img);
+        std::vector<Box>* forword(cv::Mat& img);
         void init();
 
     protected:

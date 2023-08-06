@@ -19,7 +19,8 @@ protected:
 	nvinfer1::ICudaEngine* engine;
 	nvinfer1::IRuntime* runtime;
 	cudaStream_t stream;
-
+	cudaEvent_t start_time;
+	cudaEvent_t end_time;
 public:
 	IModel() = default;
 	IModel(const std::string& path) :
@@ -56,12 +57,16 @@ public:
 		assert(context != nullptr);
 		delete[] trtModelStreamDet;
 
+		cudaEventCreate(&start_time);
+		cudaEventCreate(&end_time);
 		cudaStreamCreate(&stream);
 	};
 protected:
 
 	virtual void dispose()
 	{
+		cudaEventDestroy(start_time);
+		cudaEventDestroy(end_time);
 		context->destroy();
 		engine->destroy();
 		runtime->destroy();

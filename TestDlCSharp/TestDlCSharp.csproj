@@ -38,6 +38,9 @@
     <Reference Include="DeepLearning.Te_lib_teAiFlowEngine_CSharp">
       <HintPath>..\require\DeepLearning.Te_lib_teAiFlowEngine_CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="halcondotnet">
+      <HintPath>..\require\CSharplib\halcondotnet.dll</HintPath>
+    </Reference>
     <Reference Include="OpenCvSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\require\CSharplib\OpenCvSharp.dll</HintPath>

@@ -26,7 +26,7 @@ namespace app {
         IModel::dispose();
     };
 
-    std::vector<Box> yolov8::forword(cv::Mat& img) {
+    std::vector<Box>* yolov8::forword(cv::Mat& img) {
         affine_matrix afmt;
         cv::Size from(img.cols, img.rows);
         get_affine_martrix(afmt, tergetsize, from);
@@ -49,7 +49,7 @@ namespace app {
         cudaMemcpyAsync(decode_ptr_host, decode_ptr_device, sizeof(float) * (1 + max_objects * NUM_BOX_ELEMENT), cudaMemcpyDeviceToHost, stream);
         CHECK(cudaStreamSynchronize(stream));
 
-        std::vector<app::Box> boxes;
+        std::vector<app::Box>* boxes  =new std::vector<app::Box>;
 
         int boxes_count = 0;
         int count = std::min((int)*decode_ptr_host, max_objects);
@@ -68,17 +68,17 @@ namespace app {
                 box.bottom = decode_ptr_host[basic_pos + 3];
                 box.confidence = decode_ptr_host[basic_pos + 4];
                 box.class_label = decode_ptr_host[basic_pos + 5];
-                boxes.push_back(box);
+                boxes->push_back(box);
             }
         }
-        for (int i = 0; i < boxes_count; i++)
+        /*for (int i = 0; i < boxes_count; i++)
         {
             cv::Rect roi_area(boxes[i].left, boxes[i].top, boxes[i].right - boxes[i].left, boxes[i].bottom - boxes[i].top);
             cv::rectangle(img, roi_area, cv::Scalar(0, 255, 0), 2);
             std::string  label_string = std::to_string((int)boxes[i].class_label) + " " + std::to_string(boxes[i].confidence);
             cv::putText(img, label_string, cv::Point(boxes[i].left, boxes[i].top - 1), cv::FONT_HERSHEY_PLAIN, 1.2, cv::Scalar(0xFF, 0xFF, 0xFF), 2);
         }
-        cv::imwrite("../image_name.jpg", img);
+        cv::imwrite("../image_name.jpg", img);*/
         return boxes;
     };
 

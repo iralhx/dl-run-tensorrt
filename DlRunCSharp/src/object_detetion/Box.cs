@@ -18,6 +18,10 @@ namespace DlRunCSharp
         public int label { get; set; }
         public IntPtr MatPtr { get; set;}
 
+        public void Dispose()
+        {
+            Marshal.FreeHGlobal(MatPtr);
+        }
 
     }
 
