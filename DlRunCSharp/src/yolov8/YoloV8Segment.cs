@@ -4,6 +4,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using DlRunCSharp;
+using HalconDotNet;
 using OpenCvSharp;
 
 namespace DlRunCSharp
@@ -24,9 +26,11 @@ namespace DlRunCSharp
             Box[] boxs = new Box[count];
             for (int i = 0; i < count; i++)
             {
-                Box box = Export.get_vector_box(boxsPtr, i);
-                boxs[i] = box;
+                YoloBox box = Export.get_vector_box(boxsPtr, i);
+                boxs[i] = new Box(box);
+                //box.Dispose();
             }
+            Marshal.FreeHGlobal(boxsPtr);
             return boxs;
         }
 

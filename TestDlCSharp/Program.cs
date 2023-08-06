@@ -38,22 +38,6 @@ namespace TestDlCSharp
             }
 
 
-            //for (int i = 0; i < result.Length; i++)
-            //{
-            //    Box box = result[i];
-            //    Mat mat = new Mat(box.MatPtr);
-            //    HImage himg=new HImage("byte",mat.Width,mat.Height,mat.Data);
-            //    HOperatorSet.ZoomImageSize(himg,out HObject zoomSeg, box.x2-box.x1, box.y2 - box.y1, "constant");
-            //    HOperatorSet.Threshold(zoomSeg, out HObject region, 30, 255);
-            //    HOperatorSet.MoveRegion(region, out region, box.y1, box.x1);
-
-            //    HOperatorSet.OverpaintRegion(grayImage, region,box.label*20, "fill");
-
-            //    HOperatorSet.WriteImage(himg, "jpg", 0, $"{i}himg.jpg");
-            //}
-
-            //HOperatorSet.WriteImage(grayImage, "jpg", 0, $"srchimg.jpg");
-
             yoloV8Segment.Dispose();
 
             //Console.ReadKey();
