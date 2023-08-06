@@ -115,9 +115,8 @@ namespace app {
                         cudaMemcpyDeviceToHost, stream));
                     CHECK(cudaStreamSynchronize(stream));
 
-                    cv::Mat* seg= new cv::Mat(mask_out_height, mask_out_width, CV_8U);
-                    memcpy(seg->data, mask_out_host, mask_out_width * mask_out_height);
-                    box.segment = seg;
+                    box.segment = new cv::Mat(mask_out_height, mask_out_width, CV_8U);
+                    memcpy(box.segment->data, mask_out_host, mask_out_width * mask_out_height);
                     //cv::imwrite(std::to_string(i)+ ".jpg",*box.segment);
 
                 }

@@ -58,3 +58,24 @@ extern "C" __declspec(dllexport) app::Box _cdecl get_vector_box(std::vector<app:
 	app::Box box = (*boxs)[index];
 	return box;
 }
+
+extern "C" __declspec(dllexport) void _cdecl delete_vector_box(std::vector<app::Box>*boxs) {
+	delete boxs;
+}
+
+
+extern "C" __declspec(dllexport) cv::Mat * _cdecl himage_to_mat(unsigned char* r, unsigned char* g, unsigned char* b,
+	int height, int weith) {
+	cv::Mat* mat=new cv::Mat(height, weith, CV_8UC3);
+	for (size_t i = 0; i < height*weith; i++)
+	{
+		int index = i * 3;
+		mat->data[index] = b[i];
+		mat->data[index + 1] = g[i];
+		mat->data[index + 2] = r[i];
+	}
+	return mat;
+}
+
+
+

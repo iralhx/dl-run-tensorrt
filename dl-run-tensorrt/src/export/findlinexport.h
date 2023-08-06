@@ -26,3 +26,9 @@ extern "C" __declspec(dllexport) app::Box _cdecl get_vector_box(std::vector<app:
 
 
 
+extern "C" __declspec(dllexport) void _cdecl delete_vector_box(std::vector<app::Box>*boxs);
+
+
+extern "C" __declspec(dllexport) cv::Mat* _cdecl himage_to_mat(unsigned char* r,unsigned char* g,unsigned char* b,
+	int height,int weith);
+

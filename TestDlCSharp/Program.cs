@@ -22,19 +22,18 @@ namespace TestDlCSharp
             string modelpath = @"I:\github\dl-run-tensorrt/yolov8n-seg.engine";
 
             YoloV8Segment yoloV8Segment = new YoloV8Segment(modelpath);
-            Mat img = new Mat(imgpath,ImreadModes.Color);
-            HImage srcImage=new HImage(imgpath);
-            HOperatorSet.Rgb1ToGray(srcImage, out HObject grayImage);
 
             for (int i = 0; i < 10000; i++)
             {
-                Thread.Sleep(1000);
+                Mat img = new Mat(imgpath, ImreadModes.Color);
+               // HImage srcImage = new HImage(imgpath);
+                //Thread.Sleep(1000);
                 DateTime start = DateTime.Now;
                 Box[] result = yoloV8Segment.Forword(img);
                 DateTime end = DateTime.Now;
 
                 Console.WriteLine($"总时间time:{(end - start).TotalMilliseconds}ms");
-
+                //srcImage.Dispose();
             }
 
 

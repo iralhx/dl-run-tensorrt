@@ -9,6 +9,7 @@ namespace DlRunCSharp
 {
     internal static class Export
     {
+
         public const string DllName = "dl-run-tensorrt.dll";
 
 
@@ -36,6 +37,10 @@ namespace DlRunCSharp
 
         [DllImport(DllName)]
         public static extern YoloBox get_vector_box(IntPtr vector,int index);
+
+
+        [DllImport(DllName)]
+        public static extern void delete_vector_box(IntPtr vector);
 
     }
 }

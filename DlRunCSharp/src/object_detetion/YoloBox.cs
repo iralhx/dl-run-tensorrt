@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace DlRunCSharp
 {
     [StructLayout( LayoutKind.Sequential)]
-    internal struct YoloBox
+    public struct YoloBox
     {
         public float x1 { get; set; }
         public float y1 { get; set; }

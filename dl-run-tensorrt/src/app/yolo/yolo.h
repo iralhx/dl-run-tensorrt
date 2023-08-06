@@ -9,3 +9,4 @@ struct affine_matrix  //前处理仿射变换矩阵和逆矩阵
 };
 
 void get_affine_martrix(affine_matrix& afmt, cv::Size& to, cv::Size& from);
+
