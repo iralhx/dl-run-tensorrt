@@ -48,7 +48,7 @@ namespace DlRunCSharp
         public static extern int get_vector_point_size(IntPtr points);
 
         [DllImport(DllName)]
-        public static extern void copy_vector_point([Out][MarshalAs(UnmanagedType.LPArray)] int[]  rows, [Out][MarshalAs(UnmanagedType.LPArray)] int[] cols, IntPtr points);
+        public static extern void copy_vector_point([Out][MarshalAs(UnmanagedType.LPArray)] float[]  rows, [Out][MarshalAs(UnmanagedType.LPArray)] float[] cols, IntPtr points);
 
     }
 }

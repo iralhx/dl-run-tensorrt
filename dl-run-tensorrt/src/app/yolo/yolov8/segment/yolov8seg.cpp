@@ -3,16 +3,14 @@
 #include"yolov8seg.h"
 #include"yolov8seg_kernel.h"
 
-std::vector<app::Point>* find_edge(cv::Mat segment, int src_height, int src_weith);
+std::vector<app::Point>* find_edge(cv::Mat segment, float scale_to_predict_x, float scale_to_predict_y, float* matrix);
 
-std::vector<app::Point>* find_edge(cv::Mat segment, int src_height, int src_weith) {
+std::vector<app::Point>* find_edge(cv::Mat segment, float scale_to_predict_x, float scale_to_predict_y, float* matrix){
 
     std::vector<app::Point>* edge = new std::vector<app::Point>;
     // 进行二值化，将非零像素置为255
-   cv::Mat srcSegment;
-    cv::resize(segment, srcSegment, cv::Size(src_weith, src_height));
     cv::Mat binarySegment;
-    cv::threshold(srcSegment, binarySegment, 30, 255, cv::THRESH_BINARY);
+    cv::threshold(segment, binarySegment, 30, 255, cv::THRESH_BINARY);
 
     // 查找边缘轮廓
     std::vector<std::vector<cv::Point>> contours;
@@ -34,10 +32,11 @@ std::vector<app::Point>* find_edge(cv::Mat segment, int src_height, int src_weit
         const std::vector<cv::Point>& maxContour = contours[maxContourIndex];
         for (size_t i = 0; i < maxContour.size(); ++i) {
             app::Point point;
-            point.x = maxContour[i].x;
-            point.y = maxContour[i].y;
-
-
+            float x, y;
+            x = maxContour[i].x/ scale_to_predict_x;
+            y = maxContour[i].y/ scale_to_predict_y;
+            point.x = matrix[0] * x + matrix[1] * y;
+            point.y= matrix[3] * x + matrix[4] * y;
             edge->push_back(point);
         }
     }
@@ -171,7 +170,7 @@ namespace app {
 
                     cv::Mat mat(mask_out_height, mask_out_width, CV_8U);
                     memcpy(mat.data, mask_out_host, mask_out_width * mask_out_height);
-                    box.segment_point = find_edge(mat, box.bottom - box.top, box.right - box.left);
+                    box.segment_point = find_edge(mat, scale_to_predict_x, scale_to_predict_y, afmt.d2i);
 
 
                     //cv::imwrite(std::to_string(i)+ ".jpg",*box.segment);

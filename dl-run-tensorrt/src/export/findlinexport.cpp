@@ -87,7 +87,7 @@ extern "C" __declspec(dllexport) int _cdecl get_vector_point_size(std::vector<ap
 
 
 
-extern "C" __declspec(dllexport) void _cdecl copy_vector_point(int* rows,int* cols, std::vector<app::Point>*points) {
+extern "C" __declspec(dllexport) void _cdecl copy_vector_point(float* rows, float* cols, std::vector<app::Point>*points) {
 	
 	for (size_t i = 0; i < points->size(); i++)
 	{

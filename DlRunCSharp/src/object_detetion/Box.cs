@@ -46,12 +46,14 @@ namespace DlRunCSharp
                 return;
             }
 
-            int[] rows = new int[count];
-            int[] cols = new int[count];
+            float[] rows = new float[count];
+            float[] cols = new float[count];
             Export.copy_vector_point(rows, cols, yoloBox.PointPtr);
+            HTuple hrows= new HTuple(rows);
+            HTuple hcols = new HTuple(cols);
 
             HObject xld, srcRegion;
-            HOperatorSet.GenContourPolygonXld(out xld, rows, cols);
+            HOperatorSet.GenContourPolygonXld(out xld, hrows, hcols);
             HOperatorSet.GenRegionContourXld(xld, out srcRegion, "filled");
 
             //Mat mat = new Mat(yoloBox.MatPtr);

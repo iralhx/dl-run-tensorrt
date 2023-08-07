@@ -28,18 +28,18 @@ namespace TestDlCSharp
                 Mat img = new Mat(imgpath, ImreadModes.Color);
                 //HImage srcImage = new HImage(imgpath);
                 //HOperatorSet.Rgb1ToGray(srcImage, out HObject grayImage);
-                //Thread.Sleep(1000);
+                Thread.Sleep(200);
                 DateTime start = DateTime.Now;
                 Box[] result = yoloV8Segment.Forword(img);
 
-                //for (int j   = 0; j < result.Length; j++)
+                //for (int j = 0; j < result.Length; j++)
                 //{
                 //    HOperatorSet.OverpaintRegion(grayImage, result[j].Region, result[j].Label * 20, "fill");
                 //    //HOperatorSet.WriteRegion(result[j].Region, $"I:\\github\\dl-run-tensorrt\\{i}.hobj");
                 //}
                 //HOperatorSet.WriteImage(grayImage, "png", 0, $"I:\\github\\dl-run-tensorrt\\{i}.png");
                 DateTime end = DateTime.Now;
-                img.Dispose();
+                //img.Dispose();
                 allTime += (end - start).TotalMilliseconds;
                 Console.WriteLine($"当前索引：{i}，总时间{(end - start).TotalMilliseconds} 平均时间time:{allTime/(i+1)}ms");
                 //srcImage.Dispose();
