@@ -36,11 +36,19 @@ namespace DlRunCSharp
         public static extern int get_vector_box_size(IntPtr vector);
 
         [DllImport(DllName)]
-        public static extern YoloBox get_vector_box(IntPtr vector,int index);
+        public static extern IntPtr get_vector_box(IntPtr vector,int index);
 
 
         [DllImport(DllName)]
         public static extern void delete_vector_box(IntPtr vector);
+
+
+
+        [DllImport(DllName)]
+        public static extern int get_vector_point_size(IntPtr points);
+
+        [DllImport(DllName)]
+        public static extern void copy_vector_point([Out][MarshalAs(UnmanagedType.LPArray)] int[]  rows, [Out][MarshalAs(UnmanagedType.LPArray)] int[] cols, IntPtr points);
 
     }
 }

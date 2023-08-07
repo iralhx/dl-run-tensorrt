@@ -25,13 +25,16 @@ namespace DlRunCSharp
             int count = 0;
             IntPtr result =  Export.yolov8_forword(ptr, mat.CvPtr, ref count);
             Box[] boxs = new Box[count];
-            YoloBox yoloBox;
             for (int i = 0; i < count; i++)
             {
-                yoloBox = Export.get_vector_box(result, i);
+                IntPtr boxPtr = Export.get_vector_box(result, i);
+                YoloBox yoloBox = Marshal.PtrToStructure<YoloBox>(boxPtr);
                 boxs[i] = new Box(yoloBox);
             }
+            GC.KeepAlive(result);
             Export.delete_vector_box(result);
+
+            
 
             return boxs;
         }

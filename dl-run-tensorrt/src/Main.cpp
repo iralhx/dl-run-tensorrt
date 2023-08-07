@@ -49,9 +49,9 @@ int main()
 	//std::vector<app::Box> boxs =  yolo.forword(img);
 	for (size_t i = 0; i < count; i++)
 	{
-		app::Box b = get_vector_box(result, i);
-		cv::Mat* seg=(cv::Mat*)(b.segment);
-		cv::imwrite(std::to_string(i) + ".jpg", *(seg));
+		app::Box* b = get_vector_box(result, i);
+		//cv::Mat* seg=(cv::Mat*)(b.segment);
+		//cv::imwrite(std::to_string(i) + ".jpg", *(seg));
 	}
 	//cv::imshow("Image with Rectangle", mat);
 	//cv::waitKey(0);

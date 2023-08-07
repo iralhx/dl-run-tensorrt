@@ -40,22 +40,36 @@ namespace DlRunCSharp
             this.Confidence=yoloBox.Confidence;
             this.Label=yoloBox.label;
 
-            Mat mat = new Mat(yoloBox.MatPtr);
-            HImage himg = new HImage("byte", mat.Width, mat.Height, mat.Data);
-            HOperatorSet.ZoomImageSize(himg, out HObject zoomSeg, yoloBox.x2 - yoloBox.x1, yoloBox.y2 - yoloBox.y1, "constant");
-            HOperatorSet.Threshold(zoomSeg, out HObject srcRegion, 30, 255);
+            int count =Export.get_vector_point_size(yoloBox.PointPtr);
+            if (count==0)
+            {
+                return;
+            }
+
+            int[] rows = new int[count];
+            int[] cols = new int[count];
+            Export.copy_vector_point(rows, cols, yoloBox.PointPtr);
+
+            HObject xld, srcRegion;
+            HOperatorSet.GenContourPolygonXld(out xld, rows, cols);
+            HOperatorSet.GenRegionContourXld(xld, out srcRegion, "filled");
+
+            //Mat mat = new Mat(yoloBox.MatPtr);
+            //HImage himg = new HImage("byte", mat.Width, mat.Height, mat.Data);
+            //HOperatorSet.ZoomImageSize(himg, out HObject zoomSeg, yoloBox.x2 - yoloBox.x1, yoloBox.y2 - yoloBox.y1, "constant");
+            //HOperatorSet.Threshold(zoomSeg, out HObject srcRegion, 30, 255);
             HOperatorSet.MoveRegion(srcRegion, out HObject region, yoloBox.y1, yoloBox.x1);
             this.Region = region;
 
-            himg.Dispose();
-            zoomSeg.Dispose();
+            //himg.Dispose();
+            //zoomSeg.Dispose();
             srcRegion.Dispose();
         }
 
 
         public void Dispose()
         {
-            Region.Dispose();
+            Region?.Dispose();
         }
 
     }

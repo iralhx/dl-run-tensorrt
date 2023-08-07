@@ -50,12 +50,15 @@ extern "C" __declspec(dllexport) void _cdecl dispose(IModel<cv::Mat>*model)
 
 extern "C" __declspec(dllexport) int _cdecl get_vector_box_size(std::vector<app::Box>*bos)
 {
+
+
 	return bos->size();
 }
 
-extern "C" __declspec(dllexport) app::Box _cdecl get_vector_box(std::vector<app::Box>*boxs, int index)
+extern "C" __declspec(dllexport) app::Box* _cdecl get_vector_box(std::vector<app::Box>*boxs, int index)
 {
-	app::Box box = (*boxs)[index];
+	app::Box* box = &(*boxs)[index];
+	
 	return box;
 }
 
@@ -78,4 +81,18 @@ extern "C" __declspec(dllexport) cv::Mat * _cdecl himage_to_mat(unsigned char* r
 }
 
 
+extern "C" __declspec(dllexport) int _cdecl get_vector_point_size(std::vector<app::Point>*points) {
+	return points->size();
+}
+
+
+
+extern "C" __declspec(dllexport) void _cdecl copy_vector_point(int* rows,int* cols, std::vector<app::Point>*points) {
+	
+	for (size_t i = 0; i < points->size(); i++)
+	{
+		rows[i] = points->at(i).y;
+		cols[i] = points->at(i).x;
+	}
+}
 

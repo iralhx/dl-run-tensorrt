@@ -3,6 +3,47 @@
 #include"yolov8seg.h"
 #include"yolov8seg_kernel.h"
 
+std::vector<app::Point>* find_edge(cv::Mat segment, int src_height, int src_weith);
+
+std::vector<app::Point>* find_edge(cv::Mat segment, int src_height, int src_weith) {
+
+    std::vector<app::Point>* edge = new std::vector<app::Point>;
+    // 进行二值化，将非零像素置为255
+   cv::Mat srcSegment;
+    cv::resize(segment, srcSegment, cv::Size(src_weith, src_height));
+    cv::Mat binarySegment;
+    cv::threshold(srcSegment, binarySegment, 30, 255, cv::THRESH_BINARY);
+
+    // 查找边缘轮廓
+    std::vector<std::vector<cv::Point>> contours;
+    std::vector<cv::Vec4i> hierarchy;
+    cv::findContours(binarySegment, contours, hierarchy, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+
+    if (!contours.empty())
+    {
+
+        size_t maxContourIndex = 0;
+        double maxContourArea = cv::contourArea(contours[0]);
+        for (size_t i = 1; i < contours.size(); ++i) {
+            double area = cv::contourArea(contours[i]);
+            if (area > maxContourArea) {
+                maxContourIndex = i;
+                maxContourArea = area;
+            }
+        }
+        const std::vector<cv::Point>& maxContour = contours[maxContourIndex];
+        for (size_t i = 0; i < maxContour.size(); ++i) {
+            app::Point point;
+            point.x = maxContour[i].x;
+            point.y = maxContour[i].y;
+
+
+            edge->push_back(point);
+        }
+    }
+
+    return edge;
+};
 namespace app {
 
     yolov8seg::yolov8seg() = default;
@@ -25,6 +66,14 @@ namespace app {
     };
 
     std::vector<Box>* yolov8seg::forword(cv::Mat& img) {
+
+        float find_latency = 0;
+        cudaEvent_t find_start_time;
+        cudaEvent_t find_end_time;
+        cudaEventCreate(&find_start_time);
+        cudaEventCreate(&find_end_time);
+
+
         CHECK(cudaEventRecord(start_time));
         affine_matrix afmt;
         cv::Size from(img.cols, img.rows);
@@ -67,12 +116,16 @@ namespace app {
         std::vector<app::Box>* boxes =new std::vector<app::Box>;
         int count = std::min((int)*decode_ptr_host, max_objects);
 
+        float scale_to_predict_x = dim_mask.d[3] / (float)width;
+        float scale_to_predict_y = dim_mask.d[2] / (float)height;
+
         for (int i = 0; i < count; i++)
         {
             float* basic_pos = decode_ptr_host+1 + i * NUM_BOX_ELEMENT;
             int keep_flag = basic_pos[6];
             if (keep_flag == 1)
             {
+                CHECK(cudaEventRecord(find_start_time));
                 app::Box box;
                 box.left = basic_pos [0];
                 box.top = basic_pos[1];
@@ -90,8 +143,6 @@ namespace app {
                 float box_width = right - left;
                 float box_height = bottom - top;
 
-                float scale_to_predict_x = dim_mask.d[3] / (float)width;
-                float scale_to_predict_y = dim_mask.d[2] / (float)height;
                 int mask_out_width = box_width * scale_to_predict_x + 0.5f;
                 int mask_out_height = box_height * scale_to_predict_y + 0.5f;
                 int row_index = basic_pos[7];
@@ -115,15 +166,30 @@ namespace app {
                         cudaMemcpyDeviceToHost, stream));
                     CHECK(cudaStreamSynchronize(stream));
 
-                    box.segment = new cv::Mat(mask_out_height, mask_out_width, CV_8U);
-                    memcpy(box.segment->data, mask_out_host, mask_out_width * mask_out_height);
+
+
+
+                    cv::Mat mat(mask_out_height, mask_out_width, CV_8U);
+                    memcpy(mat.data, mask_out_host, mask_out_width * mask_out_height);
+                    box.segment_point = find_edge(mat, box.bottom - box.top, box.right - box.left);
+
+
                     //cv::imwrite(std::to_string(i)+ ".jpg",*box.segment);
 
                 }
                 boxes->push_back(box);
 
+                CHECK(cudaEventRecord(find_end_time));
+                CHECK(cudaEventSynchronize(find_end_time));
+
+                CHECK(cudaEventElapsedTime(&find_latency, find_start_time, find_end_time));
+
+                printf("找轮廓: %.5f ms     ", find_latency);
+
             }
         }
+
+
 
         CHECK(cudaEventRecord(end_time));
 
@@ -131,9 +197,16 @@ namespace app {
         CHECK(cudaEventElapsedTime(&latency, start_time,end_time));
 
         printf("后处理: %.5f ms     ", latency);
+
+
+
+        cudaEventDestroy(find_end_time);
+        cudaEventDestroy(find_start_time);
         return boxes;
 
     };
+
+  
 
 
     void yolov8seg::init() {

@@ -22,7 +22,7 @@ extern "C" __declspec(dllexport) void _cdecl dispose(IModel<cv::Mat>*model);
 
 extern "C" __declspec(dllexport) int _cdecl get_vector_box_size(std::vector<app::Box>*bos);
 
-extern "C" __declspec(dllexport) app::Box _cdecl get_vector_box(std::vector<app::Box>*boxs, int index);
+extern "C" __declspec(dllexport) app::Box* _cdecl get_vector_box(std::vector<app::Box>*boxs, int index);
 
 
 
@@ -32,3 +32,6 @@ extern "C" __declspec(dllexport) void _cdecl delete_vector_box(std::vector<app::
 extern "C" __declspec(dllexport) cv::Mat* _cdecl himage_to_mat(unsigned char* r,unsigned char* g,unsigned char* b,
 	int height,int weith);
 
+extern "C" __declspec(dllexport) int _cdecl get_vector_point_size(std::vector<app::Point>*points);
+
+extern "C" __declspec(dllexport) void _cdecl copy_vector_point(int* rows, int* cols, std::vector<app::Point>*points);

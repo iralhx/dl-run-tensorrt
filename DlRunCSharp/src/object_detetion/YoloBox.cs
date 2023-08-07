@@ -16,12 +16,8 @@ namespace DlRunCSharp
         public float y2 { get; set; }
         public float Confidence { get; set; }
         public int label { get; set; }
-        public IntPtr MatPtr { get; set;}
+        public IntPtr PointPtr { get; set;}
 
-        public void Dispose()
-        {
-            Marshal.FreeHGlobal(MatPtr);
-        }
 
     }
 
