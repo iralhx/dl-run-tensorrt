@@ -15,6 +15,7 @@ extern "C" __declspec(dllexport) IModel<std::vector<app::Box>*>*_cdecl create_yo
 
 extern "C" __declspec(dllexport) IModel<std::vector<app::Box>*>*_cdecl create_yolov8_segment(const char* path);
 
+
 extern "C" __declspec(dllexport) int _cdecl yolov8_segment_weight(app::yolov8seg * model);
 
 extern "C" __declspec(dllexport) std::vector<app::Box>* _cdecl yolov8_forword(
@@ -25,8 +26,6 @@ extern "C" __declspec(dllexport) void _cdecl dispose(IModel<cv::Mat>*model);
 extern "C" __declspec(dllexport) int _cdecl get_vector_box_size(std::vector<app::Box>*bos);
 
 extern "C" __declspec(dllexport) app::Box* _cdecl get_vector_box(std::vector<app::Box>*boxs, int index);
-
-
 
 extern "C" __declspec(dllexport) void _cdecl delete_vector_box(std::vector<app::Box>*boxs);
 

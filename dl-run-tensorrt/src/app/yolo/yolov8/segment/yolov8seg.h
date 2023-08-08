@@ -26,15 +26,15 @@ namespace app {
         float* decode_ptr_device;
         float* decode_ptr_host;
         cv::Size tergetsize;
-
+        int max_objects = 1024;
         Dims dim_output;
         Dims dim_mask;
-    public:
         int num_classes = 80;
         int output_candidates = 8400;
+    public:
         float bbox_conf_thresh = 0.5;
-        int max_objects = 1024;
         float nms_thresh = 0.3;
+        float seg_thresh = 0.3;
     public:
 
         yolov8seg();

@@ -3,14 +3,15 @@
 #include"yolov8seg.h"
 #include"yolov8seg_kernel.h"
 
-std::vector<app::Point>* find_edge(cv::Mat segment, float scale_to_predict_x, float scale_to_predict_y, float* matrix);
+std::vector<app::Point>* find_edge(cv::Mat segment ,float seg_thresh, float scale_to_predict_x, float scale_to_predict_y, float* matrix);
 
-std::vector<app::Point>* find_edge(cv::Mat segment, float scale_to_predict_x, float scale_to_predict_y, float* matrix){
+std::vector<app::Point>* find_edge(cv::Mat segment, float seg_thresh, float scale_to_predict_x, float scale_to_predict_y, float* matrix){
 
+    int thread = seg_thresh * 255;
     std::vector<app::Point>* edge = new std::vector<app::Point>;
     // 进行二值化，将非零像素置为255
     cv::Mat binarySegment;
-    cv::threshold(segment, binarySegment, 30, 255, cv::THRESH_BINARY);
+    cv::threshold(segment, binarySegment, thread, 255, cv::THRESH_BINARY);
 
     // 查找边缘轮廓
     std::vector<std::vector<cv::Point>> contours;
@@ -80,7 +81,7 @@ namespace app {
         cudaMemcpyAsync(affine_matrix_d2i_device, afmt.d2i, sizeof(afmt.d2i), cudaMemcpyHostToDevice, stream);
         cudaMemcpyAsync(affine_matrix_i2d_device, afmt.i2d, sizeof(afmt.i2d), cudaMemcpyHostToDevice, stream);
 
-        cudaMemcpyAsync(cuda_device_img, img.data, img.cols * img.rows * 3, cudaMemcpyHostToDevice, stream);
+        cudaMemcpyAsync(cuda_device_img, img.data, img.cols * img.rows * img.channels(), cudaMemcpyHostToDevice, stream);
         CHECK(cudaStreamSynchronize(stream));
 
         preprocess_kernel_img(cuda_device_img, img.cols, img.rows, buffers[0], width, height, affine_matrix_d2i_device, stream);  // cuda前处理 letter_box
@@ -172,7 +173,7 @@ namespace app {
 
                     cv::Mat mat(mask_out_height, mask_out_width, CV_8U);
                     memcpy(mat.data, mask_out_host, mask_out_width * mask_out_height);
-                    box.segment_point = find_edge(mat, scale_to_predict_x, scale_to_predict_y, afmt.d2i);
+                    box.segment_point = find_edge(mat , seg_thresh, scale_to_predict_x, scale_to_predict_y, afmt.d2i);
 
 
                     //cv::imwrite(std::to_string(i)+ ".jpg", mat);
@@ -239,7 +240,7 @@ namespace app {
         }
 
         nms_thresh = 0.3;
-        cudaMalloc((void**)&buffers[0], 3 * height * width * sizeof(float));
+        cudaMalloc((void**)&buffers[0], in_dims.d[1] * height * width * sizeof(float));
         cudaMalloc((void**)&buffers[2], output_size * sizeof(float));
         cudaMalloc((void**)&buffers[1], output_mask_size * sizeof(float));
         cudaMalloc(&cuda_transpose, output_size * sizeof(float));
