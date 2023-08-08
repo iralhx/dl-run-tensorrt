@@ -18,19 +18,29 @@ namespace TestDlCSharp
         static void Main(string[] args)
         {
             Trt.SetDevice(0);
-            string imgpath = @"I:\github\dl-run-tensorrt/bus1.jpg";
-            string modelpath = @"I:\github\dl-run-tensorrt/yolov8n-seg.engine";
+            string imgpath = "I:\\github\\infer\\workspace\\inference\\gril.jpg";
+            string onnxpath = @"I:\github\dl-run-tensorrt/yolov8l-seg.onnx";
+            string modelpath = @"I:\github\dl-run-tensorrt/yolov8l-seg.engine";
 
+            if (!File.Exists( modelpath))
+            {
+                Trt.Onnx2Trt(onnxpath, modelpath);
+            }
+
+            string imgpath1 = @"I:\\github\\dl-run-tensorrt\bus1.jpg";
             YoloV8Segment yoloV8Segment = new YoloV8Segment(modelpath);
             double allTime = 0;
             for (int i = 0; i < 10000; i++)
             {
                 Mat img = new Mat(imgpath, ImreadModes.Color);
+                Mat img1 = new Mat(imgpath1, ImreadModes.Color);
                 //HImage srcImage = new HImage(imgpath);
+                //HImage srcImage1 = new HImage(imgpath1);
                 //HOperatorSet.Rgb1ToGray(srcImage, out HObject grayImage);
                 Thread.Sleep(200);
                 DateTime start = DateTime.Now;
-                Box[] result = yoloV8Segment.Forword(img);
+                Box[] result = yoloV8Segment.Forword(img1);
+                Box[] result1 = yoloV8Segment.Forword(img);
 
                 //for (int j = 0; j < result.Length; j++)
                 //{

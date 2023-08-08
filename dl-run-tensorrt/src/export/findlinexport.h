@@ -7,6 +7,8 @@
 extern "C" __declspec(dllexport) void _cdecl set_device(int index);
 
 
+extern "C" __declspec(dllexport) bool _cdecl onnx2trt(const char* onnxfile, const char* trtfile);
+
 extern "C" __declspec(dllexport) IModel<cv::Mat>*_cdecl create_findline(const char* path);
 
 extern "C" __declspec(dllexport) IModel<std::vector<app::Box>*>*_cdecl create_yolov8_detetion(const char* path);

@@ -22,8 +22,13 @@ namespace DlRunCSharp
 
         public Box[] Forword(Mat mat)
         {
+            return Forword(mat.CvPtr);
+        }
+
+        public Box[] Forword(IntPtr mat)
+        {
             int count = 0;
-            IntPtr result =  Export.yolov8_forword(ptr, mat.CvPtr, ref count);
+            IntPtr result =  Export.yolov8_forword(ptr, mat, ref count);
             Box[] boxs = new Box[count];
             for (int i = 0; i < count; i++)
             {
@@ -47,8 +52,7 @@ namespace DlRunCSharp
 
            IntPtr matPtr = ExportHelper.himage_to_mat(imgRPtr.IP, imgGPtr.IP, imgBPtr.IP, height, width);
             //BGR
-            Mat mat = new Mat(matPtr);
-            Box[] boxs = Forword(mat);
+            Box[] boxs = Forword(matPtr);
             return boxs;
         }
 

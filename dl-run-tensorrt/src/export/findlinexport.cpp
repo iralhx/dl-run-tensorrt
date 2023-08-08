@@ -7,6 +7,12 @@ extern "C" __declspec(dllexport) void _cdecl set_device(int index)
 }
 
 
+extern "C" __declspec(dllexport) bool _cdecl onnx2trt(const char* onnxfile, const char* trtfile) {
+	return trt::onnx2trt(onnxfile, trtfile);
+}
+
+
+
 extern "C" __declspec(dllexport) IModel<cv::Mat>*_cdecl create_findline(const char* path)
 {
 	return new app::findline(path);

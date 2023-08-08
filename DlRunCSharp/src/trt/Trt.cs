@@ -13,6 +13,10 @@ namespace DlRunCSharp.src.trt
             Export.set_device(index);
         }
 
+        public static bool Onnx2Trt( string onnxPath,string trtPath)
+        {
+            return Export.onnx2trt(onnxPath, trtPath);
+        }
 
 
     }

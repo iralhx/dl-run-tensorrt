@@ -105,6 +105,8 @@ namespace app {
         CHECK(cudaEventRecord(start_time));
         transposeDevice(buffers[2], dim_output.d[1], dim_output.d[2], cuda_transpose);
 
+        CHECK(cudaMemset(decode_ptr_device, 0, sizeof(float) * (1 + max_objects * NUM_BOX_ELEMENT)));
+        memset(decode_ptr_host, 0, sizeof(float) * (1 + max_objects * NUM_BOX_ELEMENT));
 
         decode_seg_result(cuda_transpose, output_candidates, num_classes, dim_mask.d[1], bbox_conf_thresh,  affine_matrix_d2i_device, decode_ptr_device, max_objects); //ºó´¦Àí cuda
         nms_kernel_invoker(decode_ptr_device, nms_thresh, max_objects);//cuda nms          
@@ -173,7 +175,7 @@ namespace app {
                     box.segment_point = find_edge(mat, scale_to_predict_x, scale_to_predict_y, afmt.d2i);
 
 
-                    //cv::imwrite(std::to_string(i)+ ".jpg",*box.segment);
+                    //cv::imwrite(std::to_string(i)+ ".jpg", mat);
 
                 }
                 boxes->push_back(box);

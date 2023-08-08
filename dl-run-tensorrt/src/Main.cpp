@@ -23,7 +23,7 @@ int main()
 
 	std::string onnx_file_seg = "./../yolov8l-seg.onnx";
 	std::string save_file_seg = "./../yolov8l-seg.engine";
-	std::string imagefile = "./../bus1.jpg";
+	std::string imagefile = "I:\\github\\infer\\workspace\\inference\\gril.jpg";
 	if (!common:: fileExists(save_file))
 	{
 		trt:: onnx2trt(onnx_file, save_file);

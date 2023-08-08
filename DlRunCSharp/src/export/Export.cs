@@ -17,6 +17,9 @@ namespace DlRunCSharp
         public static extern void set_device(int index);
 
         [DllImport(DllName)]
+        public static extern bool onnx2trt( string onnxPath, string trtPath);
+
+        [DllImport(DllName)]
         public static extern IntPtr create_findline(string path);
         [DllImport(DllName)]
         public static extern IntPtr create_yolov8_detetion(string path);
