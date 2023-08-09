@@ -55,7 +55,9 @@
     <Compile Include="src\object_detetion\Box.cs" />
     <Compile Include="src\object_detetion\YoloBox.cs" />
     <Compile Include="src\trt\Trt.cs" />
-    <Compile Include="src\yolov8\YoloV8Segment.cs" />
+    <Compile Include="src\yolo\common\Yolo.cs" />
+    <Compile Include="src\yolo\yolov5\YoloV5Detetion.cs" />
+    <Compile Include="src\yolo\yolov8\YoloV8Segment.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\segment\" />

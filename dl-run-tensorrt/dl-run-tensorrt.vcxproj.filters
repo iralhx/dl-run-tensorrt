@@ -54,6 +54,9 @@
     <ClCompile Include="src\app\yolo\yolov8\segment\yolov8seg_kernel.h">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\app\yolo\yolov5\detection\yolov5.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\trt\builder\trt_builder.h">
@@ -83,9 +86,6 @@
     <ClInclude Include="src\app\common\object_detetion.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\app\yolo\yolov8\decode_kernel.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="src\cuda\cuda_common.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -98,13 +98,21 @@
     <ClInclude Include="src\app\yolo\yolov8\detection\yolov8_kernel.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\app\yolo\yolov5\detection\yolov5.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\yolo\yolov5\detection\yolov5_kernel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\yolo\decode_kernel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="src\app\yolo\yolov8\decode_kernel.cu">
-      <Filter>源文件</Filter>
-    </CudaCompile>
     <CudaCompile Include="src\app\common\cuda_common.h" />
     <CudaCompile Include="src\app\yolo\yolov8\detection\yolov8_kernel.cu" />
     <CudaCompile Include="src\app\yolo\yolov8\segment\yolov8seg_kernel.cu" />
+    <CudaCompile Include="src\app\yolo\yolov5\detection\yolov5_kernel.cu" />
+    <CudaCompile Include="src\app\yolo\decode_kernel.cu" />
   </ItemGroup>
 </Project>

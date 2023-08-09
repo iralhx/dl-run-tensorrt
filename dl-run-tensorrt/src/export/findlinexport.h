@@ -3,6 +3,8 @@
 #include<app/yolo/yolov8/detection/yolov8.h>
 #include<app/yolo/yolov8/segment/yolov8seg.h>
 #include<trt/commom/trt_common.h>
+#include<app/yolo/yolov5/detection/yolov5.h>
+
 
 extern "C" __declspec(dllexport) void _cdecl set_device(int index);
 
@@ -11,14 +13,16 @@ extern "C" __declspec(dllexport) bool _cdecl onnx2trt(const char* onnxfile, cons
 
 extern "C" __declspec(dllexport) IModel<cv::Mat>*_cdecl create_findline(const char* path);
 
+
+extern "C" __declspec(dllexport) IModel<std::vector<app::Box>*>*_cdecl create_yolov5_detetion(const char* path);
+
+
 extern "C" __declspec(dllexport) IModel<std::vector<app::Box>*>*_cdecl create_yolov8_detetion(const char* path);
 
 extern "C" __declspec(dllexport) IModel<std::vector<app::Box>*>*_cdecl create_yolov8_segment(const char* path);
 
 
-extern "C" __declspec(dllexport) int _cdecl yolov8_segment_weight(app::yolov8seg * model);
-
-extern "C" __declspec(dllexport) std::vector<app::Box>* _cdecl yolov8_forword(
+extern "C" __declspec(dllexport) std::vector<app::Box>* _cdecl yolo_forword(
 	IModel<std::vector<app::Box>*>*model, cv::Mat img ,int& size);
 
 extern "C" __declspec(dllexport) void _cdecl dispose(IModel<cv::Mat>*model);

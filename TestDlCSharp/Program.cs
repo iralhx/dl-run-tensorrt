@@ -18,29 +18,25 @@ namespace TestDlCSharp
         static void Main(string[] args)
         {
             Trt.SetDevice(0);
-            string imgpath = "I:\\github\\infer\\workspace\\inference\\gril.jpg";
-            string onnxpath = @"I:\github\dl-run-tensorrt/yolov8l-seg.onnx";
-            string modelpath = @"I:\github\dl-run-tensorrt/yolov8l-seg.engine";
+            string imgpath = @"I:\github\dl-run-tensorrt\1.jpg";
+            string onnxpath = @"I:\github\dl-run-tensorrt/yolov5l_yuanzhu.onnx";
+            string modelpath = @"I:\github\dl-run-tensorrt/yolov5l_yuanzhu.engine";
 
             if (!File.Exists( modelpath))
             {
                 Trt.Onnx2Trt(onnxpath, modelpath);
             }
 
-            string imgpath1 = @"I:\\github\\dl-run-tensorrt\bus1.jpg";
-            YoloV8Segment yoloV8Segment = new YoloV8Segment(modelpath);
+            Yolo yolo = new YoloV5Detetion(modelpath);
             double allTime = 0;
             for (int i = 0; i < 10000; i++)
             {
-                Mat img = new Mat(imgpath, ImreadModes.Color);
-                Mat img1 = new Mat(imgpath1, ImreadModes.Color);
-                //HImage srcImage = new HImage(imgpath);
+                HImage srcImage = new HImage(imgpath);
                 //HImage srcImage1 = new HImage(imgpath1);
                 //HOperatorSet.Rgb1ToGray(srcImage, out HObject grayImage);
-                Thread.Sleep(200);
+                //Thread.Sleep(200);
                 DateTime start = DateTime.Now;
-                Box[] result = yoloV8Segment.Forword(img1);
-                Box[] result1 = yoloV8Segment.Forword(img);
+                Box[] result1 = yolo.Forword(srcImage);
 
                 //for (int j = 0; j < result.Length; j++)
                 //{
@@ -52,12 +48,12 @@ namespace TestDlCSharp
                 //img.Dispose();
                 allTime += (end - start).TotalMilliseconds;
                 Console.WriteLine($"当前索引：{i}，总时间{(end - start).TotalMilliseconds} 平均时间time:{allTime/(i+1)}ms");
-                //srcImage.Dispose();
+                srcImage.Dispose();
             }
 
 
 
-            yoloV8Segment.Dispose();
+            yolo.Dispose();
 
             Console.ReadKey();
         }

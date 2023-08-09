@@ -22,14 +22,14 @@ namespace DlRunCSharp
         [DllImport(DllName)]
         public static extern IntPtr create_findline(string path);
         [DllImport(DllName)]
-        public static extern IntPtr create_yolov8_detetion(string path);
+        public static extern IntPtr create_yolov8_detetion(string path); 
+        [DllImport(DllName)]
+        public static extern IntPtr create_yolov5_detetion(string path); 
         [DllImport(DllName)]
         public static extern IntPtr create_yolov8_segment(string path);
         [DllImport(DllName)]
-        public static extern IntPtr yolov8_forword(IntPtr ptr, IntPtr mat,ref int size);
-        
-        [DllImport(DllName)]
-        public static extern int yolov8_segment_weight(IntPtr model);
+        public static extern IntPtr yolo_forword(IntPtr ptr, IntPtr mat, ref int size);
+
 
         [DllImport(DllName)]
         public static extern void dispose(IntPtr ptr);

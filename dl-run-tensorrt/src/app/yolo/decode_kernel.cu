@@ -3,6 +3,12 @@
 #include <cuda.h>
 #include <iostream>
 #include <cuda_runtime.h>
+
+__host__ __device__ void affine_project(float* matrix, float x, float y, float* ox, float* oy) {
+    *ox = matrix[0] * x + matrix[1] * y + matrix[2];
+    *oy = matrix[3] * x + matrix[4] * y + matrix[5];
+}
+
 //84*8400
 //8400*84
 __global__ void transpose_kernel(float *src,int dim1, int dim2,float *dst){

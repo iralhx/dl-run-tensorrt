@@ -18,6 +18,10 @@ extern "C" __declspec(dllexport) IModel<cv::Mat>*_cdecl create_findline(const ch
 	return new app::findline(path);
 }
 
+extern "C" __declspec(dllexport) IModel<std::vector<app::Box>*>*_cdecl create_yolov5_detetion(const char* path) {
+
+	return new app::yolov5(path);
+}
 
 extern "C" __declspec(dllexport) IModel<std::vector<app::Box>*>*_cdecl create_yolov8_detetion(const char* path)
 {
@@ -30,13 +34,8 @@ extern "C" __declspec(dllexport) IModel<std::vector<app::Box>*>*_cdecl create_yo
 	return new app::yolov8seg(path);
 }
 
-extern "C" __declspec(dllexport) int _cdecl yolov8_segment_weight(app::yolov8seg * model)
-{
-	return model->max_objects;
-}
 
-
-extern "C" __declspec(dllexport) std::vector<app::Box>* _cdecl yolov8_forword(
+extern "C" __declspec(dllexport) std::vector<app::Box>* _cdecl yolo_forword(
 	IModel<std::vector<app::Box>*>* model, cv::Mat img,int &size)
 {
 	std::vector<app::Box>* result = model->forword(img);

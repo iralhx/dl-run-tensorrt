@@ -5,7 +5,7 @@
 #include<string>
 #include<trt/builder/trt_builder.h>
 #include<trt/commom/trt_common.h>
-#include<app/yolo/yolov8/decode_kernel.h>
+#include<app/yolo/decode_kernel.h>
 #include<app/common/object_detetion.h>
 #include<app/model/IModel.h>
 #define MAX_IMAGE_INPUT_SIZE_THRESH 2000 * 2000

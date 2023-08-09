@@ -6,7 +6,7 @@
 #include<trt/commom/trt_common.h>
 #include<app/find_line/findline.h>
 #include<app/yolo/yolov8/detection/yolov8.h>
-#include<app/yolo/yolov8/decode_kernel.h>
+#include<app/yolo/decode_kernel.h>
 #include<app/yolo/yolov8/segment/yolov8seg.h>
 #include<app/yolo/yolov8/segment/yolov8seg_kernel.h>
 #include<export/findlinexport.h>
@@ -18,12 +18,12 @@ int main()
 
 	trt::set_device(0);
 
-	std::string onnx_file = "./../yolov8n.onnx";
-	std::string save_file = "./../yolov8n.engine";
+	std::string onnx_file = "./../yolov5l_yuanzhu.onnx";
+	std::string save_file = "./../yolov5l_yuanzhu.engine";
 
 	std::string onnx_file_seg = "./../yolov8l-seg.onnx";
 	std::string save_file_seg = "./../yolov8l-seg.engine";
-	std::string imagefile = "I:\\github\\infer\\workspace\\inference\\gril.jpg";
+	std::string imagefile = "I:\\github\\dl-run-tensorrt\\2.jpg";
 	if (!common:: fileExists(save_file))
 	{
 		trt:: onnx2trt(onnx_file, save_file);
@@ -35,14 +35,14 @@ int main()
 
 	//worker(save_file, imagefile);
 
-	app::yolov8seg yolo(save_file_seg);
+	app::yolov5 yolo(save_file);
 
 
 	cv::Mat img =  cv::imread(imagefile);
 	std::vector<app::Box>* result;
 	result =yolo.forword(img);
 	int count;
-	result =yolov8_forword(&yolo, img,count);
+	result =yolo_forword(&yolo, img,count);
 	int b =get_vector_box_size(result);
 
 
@@ -50,11 +50,12 @@ int main()
 	for (size_t i = 0; i < count; i++)
 	{
 		app::Box* b = get_vector_box(result, i);
-		//cv::Mat* seg=(cv::Mat*)(b.segment);
+		cv::rectangle(img, cv::Point(b->top, b->left), cv::Point(b->bottom, b->right), 100, 2);
 		//cv::imwrite(std::to_string(i) + ".jpg", *(seg));
 	}
-	//cv::imshow("Image with Rectangle", mat);
-	//cv::waitKey(0);
+	cv::imshow("Image with Rectangle", img);
+	cv::waitKey(0);
+	cv::destroyAllWindows();
 	//cv::imwrite("./../result1.jpg", mat);
 	
 	return 0;

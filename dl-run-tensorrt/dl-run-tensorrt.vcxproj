@@ -40,7 +40,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -163,12 +163,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <CudaCompile Include="src\app\common\cuda_common.h" />
-    <CudaCompile Include="src\app\yolo\yolov8\decode_kernel.cu">
-      <FileType>CppCode</FileType>
-    </CudaCompile>
+    <CudaCompile Include="src\app\yolo\decode_kernel.cu" />
+    <CudaCompile Include="src\app\yolo\yolov5\detection\yolov5_kernel.cu" />
     <ClCompile Include="src\app\common\cuda_common.cpp" />
     <ClCompile Include="src\app\model\IModel.cpp" />
     <ClCompile Include="src\app\yolo\yolo.cpp" />
+    <ClCompile Include="src\app\yolo\yolov5\detection\yolov5.cpp" />
     <ClCompile Include="src\app\yolo\yolov8\segment\yolov8seg.cpp" />
     <ClCompile Include="src\app\yolo\yolov8\segment\yolov8seg_kernel.h" />
     <ClCompile Include="src\export\findlinexport.cpp" />
@@ -184,7 +184,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\app\common\object_detetion.h" />
-    <ClInclude Include="src\app\yolo\yolov8\decode_kernel.h" />
+    <ClInclude Include="src\app\yolo\decode_kernel.h" />
+    <ClInclude Include="src\app\yolo\yolov5\detection\yolov5.h" />
+    <ClInclude Include="src\app\yolo\yolov5\detection\yolov5_kernel.h" />
     <ClInclude Include="src\app\model\IModel.h" />
     <ClInclude Include="src\app\yolo\yolo.h" />
     <ClInclude Include="src\app\yolo\yolov8\detection\yolov8_kernel.h" />
