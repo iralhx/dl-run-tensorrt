@@ -39,6 +39,10 @@ namespace DlRunCSharp
             this.Y2=yoloBox.y2;
             this.Confidence=yoloBox.Confidence;
             this.Label=yoloBox.label;
+            if (yoloBox.PointPtr==IntPtr.Zero)
+            {
+                return;
+            }
 
             int count =Export.get_vector_point_size(yoloBox.PointPtr);
             if (count==0)

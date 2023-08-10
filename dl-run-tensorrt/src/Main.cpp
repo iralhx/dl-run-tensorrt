@@ -18,11 +18,11 @@ int main()
 
 	trt::set_device(0);
 
-	std::string onnx_file = "./../yolov5l_yuanzhu.onnx";
-	std::string save_file = "./../yolov5l_yuanzhu.engine";
+	std::string onnx_file = "./../model/yolov5l_yuanzhu.onnx";
+	std::string save_file = "./../model/yolov5l_yuanzhu.engine";
 
-	std::string onnx_file_seg = "./../yolov8l-seg.onnx";
-	std::string save_file_seg = "./../yolov8l-seg.engine";
+	std::string onnx_file_seg = "./../model/yolov8l-seg.onnx";
+	std::string save_file_seg = "./../model/yolov8l-seg.engine";
 	std::string imagefile = "I:\\github\\dl-run-tensorrt\\2.jpg";
 	if (!common:: fileExists(save_file))
 	{
@@ -50,7 +50,7 @@ int main()
 	for (size_t i = 0; i < count; i++)
 	{
 		app::Box* b = get_vector_box(result, i);
-		cv::rectangle(img, cv::Point(b->top, b->left), cv::Point(b->bottom, b->right), 100, 2);
+		cv::rectangle(img, cv::Point( b->left,b->top), cv::Point( b->right,b->bottom), 100, 2);
 		//cv::imwrite(std::to_string(i) + ".jpg", *(seg));
 	}
 	cv::imshow("Image with Rectangle", img);

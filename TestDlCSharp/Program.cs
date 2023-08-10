@@ -18,16 +18,16 @@ namespace TestDlCSharp
         static void Main(string[] args)
         {
             Trt.SetDevice(0);
-            string imgpath = @"I:\github\dl-run-tensorrt\1.jpg";
-            string onnxpath = @"I:\github\dl-run-tensorrt/yolov5l_yuanzhu.onnx";
-            string modelpath = @"I:\github\dl-run-tensorrt/yolov5l_yuanzhu.engine";
+            string imgpath = @"I:\github\dl-run-tensorrt\bus1.jpg";
+            string onnxpath = @"I:\github\dl-run-tensorrt/model/yolov8l-seg.onnx";
+            string modelpath = @"I:\github\dl-run-tensorrt/model/yolov8l-seg.engine";
 
             if (!File.Exists( modelpath))
             {
                 Trt.Onnx2Trt(onnxpath, modelpath);
             }
 
-            Yolo yolo = new YoloV5Detetion(modelpath);
+            Yolo yolo = new YoloV8Segment(modelpath);
             double allTime = 0;
             for (int i = 0; i < 10000; i++)
             {
@@ -37,13 +37,15 @@ namespace TestDlCSharp
                 //Thread.Sleep(200);
                 DateTime start = DateTime.Now;
                 Box[] result1 = yolo.Forword(srcImage);
-
-                //for (int j = 0; j < result.Length; j++)
+                //foreach (Box item in result1)
                 //{
-                //    HOperatorSet.OverpaintRegion(grayImage, result[j].Region, result[j].Label * 20, "fill");
-                //    //HOperatorSet.WriteRegion(result[j].Region, $"I:\\github\\dl-run-tensorrt\\{i}.hobj");
+                //    HOperatorSet.GenRectangle1(out HObject region, item.Y1, item.X1, item.Y2,  item.X2);
+                //    HOperatorSet.GenContourRegionXld(region, out HObject xld, "border");
+                //    HOperatorSet.GetContourXld(xld, out HTuple rows, out HTuple cols);
+                //    HOperatorSet.GenRegionPolygon(out HObject xldRegion, rows, cols);
+                //    HOperatorSet.OverpaintRegion(grayImage, xldRegion, 255, "fill");
                 //}
-                //HOperatorSet.WriteImage(grayImage, "png", 0, $"I:\\github\\dl-run-tensorrt\\{i}.png");
+                //HOperatorSet.WriteImage(grayImage, "png", 0, $"I:\\github\\dl-run-tensorrt\\adsdasd{i}.png");
                 DateTime end = DateTime.Now;
                 //img.Dispose();
                 allTime += (end - start).TotalMilliseconds;

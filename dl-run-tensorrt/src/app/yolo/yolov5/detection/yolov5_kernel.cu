@@ -5,13 +5,17 @@
 #include"yolov5_kernel.h"
 
 
-//前四个是坐标，后面全部是置信度
-static __global__ void decode_kernel(float* predict, int num_bboxes, int num_classes, float confidence_threshold, float* invert_affine_matrix, float* parray, int max_objects) {
+static __global__ void v5_decode_kernel(float* predict, int num_bboxes, int num_classes, float confidence_threshold, float* invert_affine_matrix, float* parray, int max_objects) {
 
     int position = blockDim.x * blockIdx.x + threadIdx.x;
     if (position >= num_bboxes) return;
 
     float* pitem = predict + (5 + num_classes) * position;
+
+    //整体置信度
+    float obj_confidence = pitem[4];
+    if (obj_confidence < confidence_threshold)
+        return;
 
     float* class_confidence = pitem + 5;
     float confidence = *class_confidence++;
@@ -20,24 +24,16 @@ static __global__ void decode_kernel(float* predict, int num_bboxes, int num_cla
         if (*class_confidence > confidence) {
             confidence = *class_confidence;
             label = i;
-
         }
-
-        if (*class_confidence>1)
-        {
-            printf("*class_confidence :%f  \n", *class_confidence);
-        }
-
     }
 
-    // confidence *= objectness;
+    confidence *= obj_confidence;
     if (confidence < confidence_threshold)
         return;
 
     int index = atomicAdd(parray, 1);
     if (index >= max_objects)
         return;
-    // printf("index %d max_objects %d\n", index,max_objects);
     float cx = pitem[0];
     float cy = pitem[1];
     float width = pitem[2];
@@ -66,5 +62,5 @@ void app::v5_decode_result(float* predict, int num_bboxes, int num_class, float 
 {
     dim3 block = block_dims(num_bboxes);
     dim3 grid = grid_dims(num_bboxes);
-    decode_kernel << < grid, block >> > (predict, num_bboxes, num_class, confidence_threshold, invert_affine_matrix, parray, max_objects);
+    v5_decode_kernel << < grid, block >> > (predict, num_bboxes, num_class, confidence_threshold, invert_affine_matrix, parray, max_objects);
 }

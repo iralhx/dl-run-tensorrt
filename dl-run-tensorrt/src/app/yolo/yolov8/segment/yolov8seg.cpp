@@ -67,12 +67,6 @@ namespace app {
 
     std::vector<Box>* yolov8seg::forword(cv::Mat& img) {
 
-        float find_latency = 0;
-        cudaEvent_t find_start_time;
-        cudaEvent_t find_end_time;
-        cudaEventCreate(&find_start_time);
-        cudaEventCreate(&find_end_time);
-
 
         CHECK(cudaEventRecord(start_time));
         affine_matrix afmt;
@@ -127,7 +121,6 @@ namespace app {
             int keep_flag = basic_pos[6];
             if (keep_flag == 1)
             {
-                CHECK(cudaEventRecord(find_start_time));
                 app::Box box;
                 box.left = basic_pos [0];
                 box.top = basic_pos[1];
@@ -169,28 +162,14 @@ namespace app {
                     CHECK(cudaStreamSynchronize(stream));
 
 
-
-
                     cv::Mat mat(mask_out_height, mask_out_width, CV_8U);
                     memcpy(mat.data, mask_out_host, mask_out_width * mask_out_height);
                     box.segment_point = find_edge(mat , seg_thresh, scale_to_predict_x, scale_to_predict_y, afmt.d2i);
 
-
-                    //cv::imwrite(std::to_string(i)+ ".jpg", mat);
-
                 }
                 boxes->push_back(box);
-
-                CHECK(cudaEventRecord(find_end_time));
-                CHECK(cudaEventSynchronize(find_end_time));
-
-                CHECK(cudaEventElapsedTime(&find_latency, find_start_time, find_end_time));
-
-                printf("’“¬÷¿™: %.5f ms     ", find_latency);
-
             }
         }
-
 
 
         CHECK(cudaEventRecord(end_time));
@@ -200,10 +179,6 @@ namespace app {
 
         printf("∫Û¥¶¿Ì: %.5f ms     ", latency);
 
-
-
-        cudaEventDestroy(find_end_time);
-        cudaEventDestroy(find_start_time);
         return boxes;
 
     };

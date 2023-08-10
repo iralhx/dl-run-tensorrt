@@ -16,7 +16,7 @@ namespace app {
         float bottom;
         float confidence;
         int class_label;
-        std::vector<Point>* segment_point;
+        std::vector<Point>* segment_point{nullptr};
         Box() = default;
 
     };

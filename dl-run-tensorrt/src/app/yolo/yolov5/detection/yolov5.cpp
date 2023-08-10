@@ -40,6 +40,8 @@ namespace app {
         assert(resute);
 
         v5_decode_result(buffers[1], output_candidates, num_classes, bbox_conf_thresh, affine_matrix_d2i_device, decode_ptr_device, max_objects); //ºó´¦Àí cuda
+       
+        CHECK(cudaStreamSynchronize(stream));
         nms_kernel_invoker(decode_ptr_device, nms_thresh, max_objects);//cuda nms          
         cudaMemcpyAsync(decode_ptr_host, decode_ptr_device, sizeof(float) * (1 + max_objects * NUM_BOX_ELEMENT), cudaMemcpyDeviceToHost, stream);
         CHECK(cudaStreamSynchronize(stream));
@@ -66,14 +68,6 @@ namespace app {
                 boxes->push_back(box);
             }
         }
-        /*for (int i = 0; i < boxes_count; i++)
-        {
-            cv::Rect roi_area(boxes[i].left, boxes[i].top, boxes[i].right - boxes[i].left, boxes[i].bottom - boxes[i].top);
-            cv::rectangle(img, roi_area, cv::Scalar(0, 255, 0), 2);
-            std::string  label_string = std::to_string((int)boxes[i].class_label) + " " + std::to_string(boxes[i].confidence);
-            cv::putText(img, label_string, cv::Point(boxes[i].left, boxes[i].top - 1), cv::FONT_HERSHEY_PLAIN, 1.2, cv::Scalar(0xFF, 0xFF, 0xFF), 2);
-        }
-        cv::imwrite("../image_name.jpg", img);*/
         return boxes;
     };
 
