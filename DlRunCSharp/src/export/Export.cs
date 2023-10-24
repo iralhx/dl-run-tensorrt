@@ -53,5 +53,8 @@ namespace DlRunCSharp
         [DllImport(DllName)]
         public static extern void copy_vector_point([Out][MarshalAs(UnmanagedType.LPArray)] float[]  rows, [Out][MarshalAs(UnmanagedType.LPArray)] float[] cols, IntPtr points);
 
+
+        [DllImport(DllName)]
+        public static extern int getCudaRuntimeVersion();
     }
 }

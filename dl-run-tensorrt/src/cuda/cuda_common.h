@@ -1,4 +1,7 @@
 #pragma once
+#include <cuda_runtime.h>
+#include "device_launch_parameters.h"
+
 
 #define CHECK(call)                                   \
 do                                                    \
@@ -15,3 +18,7 @@ do                                                    \
         exit(1);                                      \
     }                                                 \
 } while (0)
+
+namespace cuda {
+    int getCudaRuntimeVersion();
+};

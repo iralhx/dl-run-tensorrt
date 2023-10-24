@@ -4,10 +4,12 @@
 #include<app/yolo/yolov8/segment/yolov8seg.h>
 #include<trt/commom/trt_common.h>
 #include<app/yolo/yolov5/detection/yolov5.h>
+#include<cuda/cuda_common.h>
 
+
+extern "C" __declspec(dllexport) int _cdecl getCudaRuntimeVersion();
 
 extern "C" __declspec(dllexport) void _cdecl set_device(int index);
-
 
 extern "C" __declspec(dllexport) bool _cdecl onnx2trt(const char* onnxfile, const char* trtfile);
 
@@ -40,3 +42,5 @@ extern "C" __declspec(dllexport) cv::Mat* _cdecl himage_to_mat(unsigned char* r,
 extern "C" __declspec(dllexport) int _cdecl get_vector_point_size(std::vector<app::Point>*points);
 
 extern "C" __declspec(dllexport) void _cdecl copy_vector_point(float* rows, float* cols, std::vector<app::Point>*points);
+
+//extern "C" __declspec(dllexport) int _cdecl getCudaRuntimeVersion();

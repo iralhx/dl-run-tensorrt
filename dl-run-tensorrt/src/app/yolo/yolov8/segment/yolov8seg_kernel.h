@@ -1,5 +1,5 @@
 #pragma once
-#include<app/common/cuda_common.h>
+#include<app/common/app_cuda_common.h>
 #include<stdint.h>
 #include<app/yolo/decode_kernel.h>
 

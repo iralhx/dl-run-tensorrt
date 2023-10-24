@@ -1,6 +1,12 @@
 #include "findlinexport.h"
 
 
+
+extern "C" __declspec(dllexport) int _cdecl getCudaRuntimeVersion() {
+	return cuda::getCudaRuntimeVersion();
+}
+
+
 extern "C" __declspec(dllexport) void _cdecl set_device(int index)
 {
 	trt::set_device(index);
@@ -100,4 +106,5 @@ extern "C" __declspec(dllexport) void _cdecl copy_vector_point(float* rows, floa
 		cols[i] = points->at(i).x;
 	}
 }
+
 

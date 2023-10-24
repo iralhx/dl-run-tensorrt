@@ -81,23 +81,10 @@ namespace app {
         preprocess_kernel_img(cuda_device_img, img.cols, img.rows, buffers[0], width, height, affine_matrix_d2i_device, stream);  // cuda前处理 letter_box
         CHECK(cudaStreamSynchronize(stream));
 
-        CHECK(cudaEventRecord(end_time));
-        CHECK(cudaEventSynchronize(end_time));
-        float latency = 0;
-        CHECK(cudaEventElapsedTime(&latency, start_time, end_time));
 
-        printf("前处理: %.5f ms     ", latency);
-
-        CHECK(cudaEventRecord(start_time));
         bool resute = context->executeV2((void**)buffers);
-        CHECK(cudaEventRecord(end_time));
         assert(resute);
-        CHECK(cudaEventSynchronize(end_time));
 
-        CHECK(cudaEventElapsedTime(&latency, start_time,end_time));
-
-        printf("预测: %.5f ms     ", latency);
-        CHECK(cudaEventRecord(start_time));
         transposeDevice(buffers[2], dim_output.d[1], dim_output.d[2], cuda_transpose);
 
         CHECK(cudaMemset(decode_ptr_device, 0, sizeof(float) * (1 + max_objects * NUM_BOX_ELEMENT)));
@@ -175,9 +162,10 @@ namespace app {
         CHECK(cudaEventRecord(end_time));
 
         CHECK(cudaEventSynchronize(end_time));
+        float latency = 0;
         CHECK(cudaEventElapsedTime(&latency, start_time,end_time));
 
-        printf("后处理: %.5f ms     ", latency);
+        printf("总时间: %.5f ms     \n", latency);
 
         return boxes;
 

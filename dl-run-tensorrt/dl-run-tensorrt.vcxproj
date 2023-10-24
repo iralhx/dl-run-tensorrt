@@ -54,7 +54,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.6.props" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.8.props" />
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
@@ -162,15 +162,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CudaCompile Include="src\app\common\cuda_common.h" />
+    <CudaCompile Include="src\app\common\app_cuda_common.h" />
     <CudaCompile Include="src\app\yolo\decode_kernel.cu" />
     <CudaCompile Include="src\app\yolo\yolov5\detection\yolov5_kernel.cu" />
-    <ClCompile Include="src\app\common\cuda_common.cpp" />
+    <ClCompile Include="src\app\common\app_cuda_common.cpp" />
     <ClCompile Include="src\app\model\IModel.cpp" />
     <ClCompile Include="src\app\yolo\yolo.cpp" />
     <ClCompile Include="src\app\yolo\yolov5\detection\yolov5.cpp" />
     <ClCompile Include="src\app\yolo\yolov8\segment\yolov8seg.cpp" />
     <ClCompile Include="src\app\yolo\yolov8\segment\yolov8seg_kernel.h" />
+    <ClCompile Include="src\cuda\cuda_common.cpp" />
     <ClCompile Include="src\export\findlinexport.cpp" />
     <ClCompile Include="src\app\find_line\findline.cpp" />
     <ClCompile Include="src\common\common.cpp" />
@@ -202,6 +203,6 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.6.targets" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.8.targets" />
   </ImportGroup>
 </Project>

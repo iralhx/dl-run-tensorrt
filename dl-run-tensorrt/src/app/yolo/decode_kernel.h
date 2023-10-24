@@ -1,5 +1,5 @@
 #pragma once
-#include<app/common/cuda_common.h>
+#include<app/common/app_cuda_common.h>
 #include<stdint.h>
 // left, top, right, bottom, confidence, class, keepflag
 #define NUM_BOX_ELEMENT  8

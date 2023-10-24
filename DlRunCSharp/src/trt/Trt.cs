@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace DlRunCSharp.src.trt
 {
@@ -10,6 +11,7 @@ namespace DlRunCSharp.src.trt
     {
         public static void SetDevice(int index)
         {
+            var a = File.Exists(Export.DllName);
             Export.set_device(index);
         }
 

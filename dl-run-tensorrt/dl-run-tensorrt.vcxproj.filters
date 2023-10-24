@@ -39,7 +39,7 @@
     <ClCompile Include="src\trt\commom\trt_common.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\app\common\cuda_common.cpp">
+    <ClCompile Include="src\app\common\app_cuda_common.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Main.cpp">
@@ -55,6 +55,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\app\yolo\yolov5\detection\yolov5.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cuda\cuda_common.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -109,7 +112,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="src\app\common\cuda_common.h" />
+    <CudaCompile Include="src\app\common\app_cuda_common.h" />
     <CudaCompile Include="src\app\yolo\yolov8\detection\yolov8_kernel.cu" />
     <CudaCompile Include="src\app\yolo\yolov8\segment\yolov8seg_kernel.cu" />
     <CudaCompile Include="src\app\yolo\yolov5\detection\yolov5_kernel.cu" />

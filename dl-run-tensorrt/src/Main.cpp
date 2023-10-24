@@ -10,11 +10,10 @@
 #include<app/yolo/yolov8/segment/yolov8seg.h>
 #include<app/yolo/yolov8/segment/yolov8seg_kernel.h>
 #include<export/findlinexport.h>
+#include<cuda/cuda_common.h>
 
 int main()
 {
-
-
 
 	trt::set_device(0);
 
@@ -24,6 +23,7 @@ int main()
 	std::string onnx_file_seg = "./../model/yolov8l-seg.onnx";
 	std::string save_file_seg = "./../model/yolov8l-seg.engine";
 	std::string imagefile = "I:\\github\\dl-run-tensorrt\\2.jpg";
+	auto a = common::fileExists(imagefile);
 	if (!common:: fileExists(save_file))
 	{
 		trt:: onnx2trt(onnx_file, save_file);
@@ -32,27 +32,29 @@ int main()
 	{
 		trt::onnx2trt(onnx_file_seg, save_file_seg);
 	}
-
 	//worker(save_file, imagefile);
 
-	app::yolov5 yolo(save_file);
+	app::yolov8seg yolo(save_file_seg);
 
 
 	cv::Mat img =  cv::imread(imagefile);
 	std::vector<app::Box>* result;
 	result =yolo.forword(img);
 	int count;
-	result =yolo_forword(&yolo, img,count);
+	for (size_t i = 0; i < 1000; i++)
+	{
+		result = yolo_forword(&yolo, img, count);
+	}
 	int b =get_vector_box_size(result);
 
 
 	//std::vector<app::Box> boxs =  yolo.forword(img);
-	for (size_t i = 0; i < count; i++)
-	{
-		app::Box* b = get_vector_box(result, i);
-		cv::rectangle(img, cv::Point( b->left,b->top), cv::Point( b->right,b->bottom), 100, 2);
-		//cv::imwrite(std::to_string(i) + ".jpg", *(seg));
-	}
+	//for (size_t i = 0; i < count; i++)
+	//{
+	//	app::Box* b = get_vector_box(result, i);
+	//	cv::rectangle(img, cv::Point( b->left,b->top), cv::Point( b->right,b->bottom), 100, 2);
+	//	//cv::imwrite(std::to_string(i) + ".jpg", *(seg));
+	//}
 	cv::imshow("Image with Rectangle", img);
 	cv::waitKey(0);
 	cv::destroyAllWindows();
