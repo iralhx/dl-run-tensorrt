@@ -33,8 +33,8 @@ namespace app {
         }
 
         cudaMalloc(&buffers[0], in_dims.d[1] * height * width * sizeof(float));
-		cudaMalloc(&buffers[1], outsize * sizeof(uint32_t));
-		result_img = new uint32_t[outsize];
+		cudaMalloc(&buffers[1], outsize * sizeof(float));
+		result_img = new float[outsize];
 		cudaMalloc(&cuda_img, in_dims.d[1] * height * width * sizeof(float));
 	}
 
@@ -46,6 +46,7 @@ namespace app {
 	};
 	cv::Mat Segformer::forword(cv::Mat& img)
 	{
+		CHECK(cudaEventRecord(start_time));
 		cv::Mat input;
 
 		cv::resize(img, input, cv::Size(height, width));
@@ -54,32 +55,30 @@ namespace app {
 		CHECK(cudaStreamSynchronize(stream));
 
 
-		process_imgage(cuda_img, (float*)buffers[0], width, height,stream);
+		process_image(cuda_img, (float*)buffers[0], width, height,stream);
 		CHECK(cudaStreamSynchronize(stream));
+
+		float* proImg = new float[3 * height * width];
+		cudaMemcpyAsync(proImg, buffers[0], 3 * height * width, cudaMemcpyDeviceToHost, stream);
+		CHECK(cudaStreamSynchronize(stream));
+
 
 		bool resute = context->executeV2((void**)buffers);
 		assert(resute);
 
-		CHECK(cudaMemcpyAsync(result_img, buffers[1], outsize * sizeof(uint32_t), cudaMemcpyDeviceToHost, stream));
+		CHECK(cudaMemcpyAsync(result_img, buffers[1], outsize * sizeof(float), cudaMemcpyDeviceToHost, stream));
 		CHECK(cudaStreamSynchronize(stream));
-		uint8_t* im = new uint8_t[outsize];
-		int max_value = 0 ,max_index =-1;
-		printf("\n");
-		for (int i = 0; i < outsize; ++i) 
-		{
-			im[i] = static_cast<uint8_t>(result_img[i]);
-			if (result_img[i]> max_value)
-			{
-				max_value = result_img[i];
-				max_index = i;
-			}
-		}
 
-		printf("max value %d  ,max index %d \n", max_value, max_index);
 
-		cv::Mat* mat = new cv::Mat(height, width, CV_8UC1);
-		memcpy(mat->data, im, outsize);
-		cv::imwrite("result1.jpg", *mat);
+		CHECK(cudaEventRecord(end_time));
+
+		CHECK(cudaEventSynchronize(end_time));
+		float latency = 0;
+		CHECK(cudaEventElapsedTime(&latency, start_time, end_time));
+
+		printf("×ÜÊ±¼ä: %.5f ms     \n", latency);
+		cv::Mat* mat = new cv::Mat(height, width, CV_32FC1);
+		memcpy(mat->data, result_img, outsize * sizeof(float));
 		return *mat;
 	}
 }

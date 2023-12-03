@@ -4,11 +4,9 @@
     <ShowAllFiles>true</ShowAllFiles>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LocalDebuggerEnvironment>path=I:\Github\dl-run-tensorrt\require\opencv\bin;I:\Github\dl-run-tensorrt\require\opencv\lib;
-path=I:\Github\dl-run-tensorrt\require\cuda\bin;I:\Github\dl-run-tensorrt\require\cuda\lib;
-path=I:\Github\dl-run-tensorrt\require\tensorrt\bin;I:\Github\dl-run-tensorrt\require\tensorrt\lib;
-$(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
+    <LocalDebuggerEnvironment>$(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerMergeEnvironment>true</LocalDebuggerMergeEnvironment>
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(Platform)\$(Configuration)\</LocalDebuggerWorkingDirectory>
   </PropertyGroup>
 </Project>

@@ -17,7 +17,7 @@ namespace app {
         /// </summary>
         void* buffers[2];
         uint8_t* cuda_img;
-        uint32_t* result_img;
+        float* result_img;
         int outsize;
         int out_width;
         int out_height;

@@ -13,15 +13,17 @@
 #include<cuda/cuda_common.h>
 #include<app/segformer/Segformer.h>
 #include <filesystem>
+#include <chrono>
+
 
 int main()
 {
 	trt::set_device(0);
 
-	std::string onnx_file = "./../model/Knet.onnx";
-	std::string save_file = "./../model/Knet.engine";
+	std::string onnx_file = "./../../../model/Segformer.onnx";
+	std::string save_file = "./../../../model/Segformer.engine";
 
-	std::string imagefile = "I:/Github/dl-run-tensorrt/b.bmp";
+	std::string imagefile = "I:/Github/dl-run-tensorrt/a.bmp";
 	if (!common:: fileExists(save_file))
 	{
 		trt:: onnx2trt(onnx_file, save_file);
@@ -32,6 +34,11 @@ int main()
 	cv::cvtColor(img, input, cv::COLOR_GRAY2BGR);
 
 	app::Segformer seg(save_file);
+	for (size_t i = 0; i < 1000; i++)
+	{
+		cv::Mat result1 = seg.forword(input);
+	}
+
 	cv::Mat result =seg.forword(input);
 	cv::imshow("Image with Rectangle", result * 100);
 	cv::waitKey(0);
