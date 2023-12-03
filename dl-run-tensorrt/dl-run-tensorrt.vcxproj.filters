@@ -60,6 +60,9 @@
     <ClCompile Include="src\cuda\cuda_common.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\app\segformer\Segformer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\trt\builder\trt_builder.h">
@@ -110,6 +113,12 @@
     <ClInclude Include="src\app\yolo\decode_kernel.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\app\segformer\Segformer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\segformer\Segformer_kernel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="src\app\common\app_cuda_common.h" />
@@ -117,5 +126,8 @@
     <CudaCompile Include="src\app\yolo\yolov8\segment\yolov8seg_kernel.cu" />
     <CudaCompile Include="src\app\yolo\yolov5\detection\yolov5_kernel.cu" />
     <CudaCompile Include="src\app\yolo\decode_kernel.cu" />
+    <CudaCompile Include="src\app\segformer\Segformer_kernel.cu">
+      <Filter>源文件</Filter>
+    </CudaCompile>
   </ItemGroup>
 </Project>

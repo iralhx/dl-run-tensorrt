@@ -43,6 +43,25 @@ namespace trt {
 
 		int net_num_layers = network->getNbLayers();
 
+		for (size_t i = 0; i < net_num_layers; i++)
+		{
+			ILayer* layre = network->getLayer(i);
+		 	const char* name = layre->getName();
+			std::cout << "layer name " << name << std::endl;
+			ITensor* tensor = layre->getOutput(0);
+			Dims dim = tensor->getDimensions();
+			DataType data = layre->getOutputType(0);
+			std::cout << "tensor : ";
+
+			for (int k = 0; k < dim.nbDims; ++k) {
+				std::cout << dim.d[k] << " ";
+			}
+			std::cout << std::endl;
+			std::cout << "output type  : " << int(data) <<std::endl;
+
+		}
+
+
 		builder->setMaxBatchSize(1);
 		config->setMaxWorkspaceSize(1<< 30);
 		ICudaEngine* engine = builder->buildEngineWithConfig(*network, *config);

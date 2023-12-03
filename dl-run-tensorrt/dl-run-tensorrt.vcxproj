@@ -40,7 +40,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -167,6 +167,10 @@
     <CudaCompile Include="src\app\yolo\yolov5\detection\yolov5_kernel.cu" />
     <ClCompile Include="src\app\common\app_cuda_common.cpp" />
     <ClCompile Include="src\app\model\IModel.cpp" />
+    <ClCompile Include="src\app\segformer\Segformer.cpp" />
+    <CudaCompile Include="src\app\segformer\Segformer_kernel.cu">
+      <FileType>CppCode</FileType>
+    </CudaCompile>
     <ClCompile Include="src\app\yolo\yolo.cpp" />
     <ClCompile Include="src\app\yolo\yolov5\detection\yolov5.cpp" />
     <ClCompile Include="src\app\yolo\yolov8\segment\yolov8seg.cpp" />
@@ -185,6 +189,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\app\common\object_detetion.h" />
+    <ClInclude Include="src\app\segformer\Segformer.h" />
+    <ClInclude Include="src\app\segformer\Segformer_kernel.h" />
     <ClInclude Include="src\app\yolo\decode_kernel.h" />
     <ClInclude Include="src\app\yolo\yolov5\detection\yolov5.h" />
     <ClInclude Include="src\app\yolo\yolov5\detection\yolov5_kernel.h" />
