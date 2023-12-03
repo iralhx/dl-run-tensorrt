@@ -33,16 +33,24 @@ namespace TestDlCSharp
 
             Yolo yolo = new YoloV8Segment(modelpath);
             double allTime = 0;
-            for (int i = 0; i < 1000; i++)
+            int allCount = 200;
+            int breakCount = 40;
+            for (int i = 0; i < allCount; i++)
             {
                 HImage srcImage = new HImage(imgpath);
                 DateTime start = DateTime.Now;
                 Box[] result1 = yolo.Forword(srcImage);
                 DateTime end = DateTime.Now;
-                allTime += (end - start).TotalMilliseconds;
-                Console.WriteLine($"当前索引：{i}，总时间{(end - start).TotalMilliseconds} 平均时间time:{allTime/(i+1)}ms");
+                Console.WriteLine($"当前索引：{i}，单次时间 ：{(end - start).TotalMilliseconds}");
                 srcImage.Dispose();
+                if (i<breakCount)
+                {
+                    continue;
+                }
+                allTime += (end - start).TotalMilliseconds;
             }
+
+            Console.WriteLine($"avg time : {allTime / (allCount - breakCount)}");
 
             yolo.Dispose();
 
