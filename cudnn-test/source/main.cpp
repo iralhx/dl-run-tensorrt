@@ -5,6 +5,7 @@
 #include <chrono>
 #include<cudnn.h>
 #include <string>
+#include"commom/Conv.h"
 
 #define CHECK_CUDNN(expression)                             \
   {                                                          \
@@ -19,7 +20,7 @@
 int main()
 {
 	std::printf("123");
-
+    Conv2D a;
 
     // 定义神经网络参数
     const int input_channels = 1;
@@ -46,10 +47,10 @@ int main()
     CHECK_CUDNN(cudnnCreateActivationDescriptor(&activation_desc));
     CHECK_CUDNN(cudnnSetActivationDescriptor(activation_desc, CUDNN_ACTIVATION_RELU, CUDNN_NOT_PROPAGATE_NAN, 0.0));
 
-    CHECK_CUDNN(cudnnConvolutionForward(cudnnHandle, &alpha, dataTensor,
+    /*CHECK_CUDNN(cudnnConvolutionForward(cudnnHandle, &alpha, dataTensor,
         data, conv1filterDesc, pconv1, conv1Desc,
         conv1algo, workspace, m_workspaceSize, &beta,
-        conv1Tensor, conv1));
+        conv1Tensor, conv1));*/
 
 	return 0;
 }
