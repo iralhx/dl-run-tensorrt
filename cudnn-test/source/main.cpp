@@ -7,10 +7,10 @@
 #include <string>
 #include"commom/Conv.h"
 
-#define CHECK_CUDNN(expression)                             \
+#define CHECK_CUDNN(expression)                              \
   {                                                          \
     cudnnStatus_t status = (expression);                     \
-    if (status != CUDNN_STATUS_SUCCESS) {                   \
+    if (status != CUDNN_STATUS_SUCCESS) {                    \
       std::cerr << "Error on line " << __LINE__ << ": "      \
                 << cudnnGetErrorString(status) << std::endl; \
       std::exit(EXIT_FAILURE);                               \
@@ -20,7 +20,6 @@
 int main()
 {
 	std::printf("123");
-    Conv2D a;
 
     // 定义神经网络参数
     const int input_channels = 1;
