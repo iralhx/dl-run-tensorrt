@@ -44,14 +44,12 @@ namespace app {
 				std::cout << msg << std::endl;
 		};
 	};
-	cv::Mat Segformer::forword(cv::Mat& img)
+
+	float* Segformer::forword(cv::Mat& img)
 	{
 		CHECK(cudaEventRecord(start_time));
-		cv::Mat input;
 
-		cv::resize(img, input, cv::Size(height, width));
-
-		cudaMemcpyAsync(cuda_img, input.data, 3 * height * width, cudaMemcpyHostToDevice, stream);
+		cudaMemcpyAsync(cuda_img, img.data, 3 * height * width, cudaMemcpyHostToDevice, stream);
 		CHECK(cudaStreamSynchronize(stream));
 
 
@@ -77,9 +75,7 @@ namespace app {
 		CHECK(cudaEventElapsedTime(&latency, start_time, end_time));
 
 		printf("×ÜÊ±¼ä: %.5f ms     \n", latency);
-		cv::Mat* mat = new cv::Mat(height, width, CV_32FC1);
-		memcpy(mat->data, result_img, outsize * sizeof(float));
-		return *mat;
+		return result_img;
 	}
 }
 

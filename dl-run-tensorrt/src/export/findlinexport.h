@@ -5,6 +5,7 @@
 #include<trt/commom/trt_common.h>
 #include<app/yolo/yolov5/detection/yolov5.h>
 #include<cuda/cuda_common.h>
+#include<app/segformer/Segformer.h>
 
 
 extern "C" __declspec(dllexport) int _cdecl getCudaRuntimeVersion();
@@ -43,4 +44,10 @@ extern "C" __declspec(dllexport) int _cdecl get_vector_point_size(std::vector<ap
 
 extern "C" __declspec(dllexport) void _cdecl copy_vector_point(float* rows, float* cols, std::vector<app::Point>*points);
 
-//extern "C" __declspec(dllexport) int _cdecl getCudaRuntimeVersion();
+extern "C" __declspec(dllexport) int _cdecl getCudaRuntimeVersion();
+
+extern "C" __declspec(dllexport) app::Segformer * _cdecl create_segformer(const char* path);
+
+extern "C" __declspec(dllexport) float*_cdecl segformer_forword(app::Segformer * model, cv::Mat* img);
+
+extern "C" __declspec(dllexport) void _cdecl delete_segformer(app::Segformer * model);

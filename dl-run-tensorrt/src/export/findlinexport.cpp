@@ -108,3 +108,22 @@ extern "C" __declspec(dllexport) void _cdecl copy_vector_point(float* rows, floa
 }
 
 
+
+
+app::Segformer* _cdecl create_segformer(const char* path)
+{
+	return new app::Segformer(path);
+}
+
+
+float* _cdecl segformer_forword(app::Segformer* model,cv::Mat* img)
+{
+	return model->forword(*img);
+}
+
+void _cdecl delete_segformer(app::Segformer* model)
+{
+	model->~Segformer();
+}
+
+

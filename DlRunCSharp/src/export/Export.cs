@@ -56,5 +56,27 @@ namespace DlRunCSharp
 
         [DllImport(DllName)]
         public static extern int getCudaRuntimeVersion();
+
+
+        /// <summary>
+        /// 创建模型
+        /// </summary>
+        [DllImport(DllName)]
+        public static extern IntPtr create_segformer(string path);
+
+
+        /// <summary>
+        /// 进行预测
+        /// 返回值为float*
+        /// </summary>
+        [DllImport(DllName)]
+        public static extern IntPtr segformer_forword(IntPtr model,IntPtr img);
+
+        /// <summary>
+        /// 释放
+        /// </summary>
+        [DllImport(DllName)]
+        public static extern void delete_segformer(IntPtr model);
+
     }
 }
