@@ -1,4 +1,6 @@
 #pragma once
+#include <cstdlib>
+#include <iostream>  
 #include<cudnn.h>
 
 #define CHECK_CUDNN(expression)                                  \

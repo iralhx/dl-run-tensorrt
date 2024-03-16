@@ -16,9 +16,17 @@ namespace common {
         cudnnTensorDescriptor_t inputDesc, outputDesc;
     public:
         Conv2D(cudnnHandle_t handle ,int batch_size , int in_channle, int out_channle, int kernel_size,
-            int in_width, int in_height):IModule(handle),batch_size(batch_size), in_channle(in_channle),
-            out_channle(out_channle), kernel_size(kernel_size), in_width(in_width),in_height(in_height)
+            int in_width, int in_height,int stride = 1,int padding =0 ,int dilation = 1):IModule(handle),
+            batch_size(batch_size), in_channle(in_channle),
+            out_channle(out_channle), kernel_size(kernel_size), in_width(in_width),in_height(in_height),
+            stride(stride),padding(padding),dilation(dilation)
         {
+
+            //计算输出的高度和宽度
+            //https://pytorch.org/docs/stable/generated/torch.nn.Conv2d.html#torch.nn.Conv2d
+            out_height = (in_height + 2 * padding - dilation * (kernel_size - 1) - 1) / stride + 1;
+            out_width = (in_width + 2 * padding - dilation * (kernel_size - 1) - 1) / stride + 1;
+
 
             CHECK_CUDNN(cudnnCreateConvolutionDescriptor(&convDesc));
             CHECK_CUDNN(cudnnCreateFilterDescriptor(&filterDesc));

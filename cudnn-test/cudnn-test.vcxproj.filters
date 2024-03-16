@@ -29,5 +29,8 @@
     <ClInclude Include="source\commom\Conv.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="source\commom\cudnn_common.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
