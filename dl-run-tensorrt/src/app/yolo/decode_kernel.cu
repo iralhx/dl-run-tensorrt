@@ -26,13 +26,13 @@ __global__ void transpose_kernel(float *src,int dim1, int dim2,float *dst){
 }
 
 
-void app::transposeDevice(float* src, int dim1, int dim2, float* dst)
+void app::transposeDevice(float* src, int dim1, int dim2, float* dst, cudaStream_t stream)
 {
     int total = dim1 * dim2;
     dim3 block = block_dims(total);
     dim3 grid = grid_dims(total);
 
-    transpose_kernel << < grid, block >> > (src, dim1, dim2, dst);
+    transpose_kernel << < grid, block,0, stream >> > (src, dim1, dim2, dst);
 }
 
 
@@ -85,11 +85,11 @@ static __global__ void nms_kernel(float* bboxes, int max_objects, float threshol
     }
 }
 
-void app::nms_kernel_invoker(float* parray, float nms_threshold, int max_objects) {
+void app::nms_kernel_invoker(float* parray, float nms_threshold, int max_objects, cudaStream_t stream) {
 
     dim3 block = block_dims (max_objects);
     dim3 grid = grid_dims(max_objects) ;
-    nms_kernel << <grid, block >> > (parray, max_objects, nms_threshold);
+    nms_kernel << <grid, block ,0, stream >> > (parray, max_objects, nms_threshold);
 }
 
 
@@ -136,6 +136,7 @@ __global__ void warpaffine_kernel(
         uint8_t* v2 = src + y_low * src_line_size + x_high * 3;
         uint8_t* v3 = src + y_high * src_line_size + x_low * 3;
         uint8_t* v4 = src + y_high * src_line_size + x_high * 3;
+
         c0 = w1 * v1[0] + w2 * v2[0] + w3 * v3[0] + w4 * v4[0];
         c1 = w1 * v1[1] + w2 * v2[1] + w3 * v3[1] + w4 * v4[1];
         c2 = w1 * v1[2] + w2 * v2[2] + w3 * v3[2] + w4 * v4[2];

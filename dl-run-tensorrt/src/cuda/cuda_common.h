@@ -21,4 +21,5 @@ do                                                    \
 
 namespace cuda {
     int getCudaRuntimeVersion();
+
 };

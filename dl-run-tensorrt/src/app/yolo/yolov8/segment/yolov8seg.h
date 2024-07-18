@@ -8,7 +8,7 @@
 #include<app/yolo/decode_kernel.h>
 #include<app/common/object_detetion.h>
 #include<app/model/IModel.h>
-#define MAX_IMAGE_INPUT_SIZE_THRESH 5000 * 5000
+#define MAX_IMAGE_INPUT_SIZE_THRESH 5000 * 10000
 
 namespace app {
 

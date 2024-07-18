@@ -55,9 +55,10 @@ static __global__ void decode_kernel(float* predict, int num_bboxes, int num_cla
     *pout_item++ = 1; // 1 = keep, 0 = ignore
 }
 
-void app::decode_result(float* predict, int num_bboxes, int num_class, float confidence_threshold, float* invert_affine_matrix, float* parray, int max_objects)
+void app::decode_result(float* predict, int num_bboxes, int num_class, float confidence_threshold, 
+    float* invert_affine_matrix, float* parray, int max_objects, cudaStream_t stream)
 {
     dim3 block = block_dims(num_bboxes);
     dim3 grid = grid_dims(num_bboxes);
-    decode_kernel << < grid, block >> > (predict, num_bboxes, num_class, confidence_threshold, invert_affine_matrix, parray, max_objects);
+    decode_kernel << < grid, block,0, stream >> > (predict, num_bboxes, num_class, confidence_threshold, invert_affine_matrix, parray, max_objects);
 }

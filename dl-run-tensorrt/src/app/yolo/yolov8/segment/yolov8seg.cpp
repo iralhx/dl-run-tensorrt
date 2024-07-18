@@ -81,17 +81,28 @@ namespace app {
         preprocess_kernel_img(cuda_device_img, img.cols, img.rows, buffers[0], width, height, affine_matrix_d2i_device, stream);  // cuda前处理 letter_box
         CHECK(cudaStreamSynchronize(stream));
 
+        /*cv::Mat t1(height, width, CV_32FC3);
+        cudaMemcpyAsync(t1.data, buffers[0], height * width * img.channels()*sizeof(float), cudaMemcpyDeviceToHost, stream);
+        CHECK(cudaStreamSynchronize(stream));
+        cv::imwrite("./12323213123.jpg", t1);
+        cv::imwrite("./1.jpg", img);*/
+
+
 
         bool resute = context->executeV2((void**)buffers);
         assert(resute);
 
-        transposeDevice(buffers[2], dim_output.d[1], dim_output.d[2], cuda_transpose);
+        transposeDevice(buffers[2], dim_output.d[1], dim_output.d[2], cuda_transpose,stream);
+        CHECK(cudaStreamSynchronize(stream));
 
         CHECK(cudaMemset(decode_ptr_device, 0, sizeof(float) * (1 + max_objects * NUM_BOX_ELEMENT)));
         memset(decode_ptr_host, 0, sizeof(float) * (1 + max_objects * NUM_BOX_ELEMENT));
 
-        decode_seg_result(cuda_transpose, output_candidates, num_classes, dim_mask.d[1], bbox_conf_thresh,  affine_matrix_d2i_device, decode_ptr_device, max_objects); //后处理 cuda
-        nms_kernel_invoker(decode_ptr_device, nms_thresh, max_objects);//cuda nms          
+        decode_seg_result(cuda_transpose, output_candidates, num_classes, dim_mask.d[1],
+            bbox_conf_thresh,  affine_matrix_d2i_device, decode_ptr_device, max_objects, stream); //后处理 cuda
+        CHECK(cudaStreamSynchronize(stream));
+        nms_kernel_invoker(decode_ptr_device, nms_thresh, max_objects, stream);//cuda nms  
+        CHECK(cudaStreamSynchronize(stream));
         cudaMemcpyAsync(decode_ptr_host, decode_ptr_device, sizeof(float) * (1 + max_objects * NUM_BOX_ELEMENT), cudaMemcpyDeviceToHost, stream);
         CHECK(cudaStreamSynchronize(stream));
 
@@ -194,9 +205,9 @@ namespace app {
         for (int j = 0; j < dim_output.nbDims; j++) {
             output_size *= dim_output.d[j];
         }
-
+        output_candidates = dim_output.d[2];
         dim_mask = engine->getTensorShape("output1");
-
+        num_classes = dim_output.d[1] - 32 - 4;
         auto output_mask_size = 1;
         for (int j = 0; j < dim_mask.nbDims; j++) {
             output_mask_size *= dim_mask.d[j];

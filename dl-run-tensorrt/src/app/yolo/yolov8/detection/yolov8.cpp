@@ -41,11 +41,15 @@ namespace app {
         bool resute = context->executeV2((void**)buffers);
         assert(resute);
 
-        transposeDevice(buffers[1], num_classes+4, output_candidates, cuda_transpose);
 
+        transposeDevice(buffers[1], num_classes+4, output_candidates, cuda_transpose, stream);
+        CHECK(cudaStreamSynchronize(stream));
 
-        decode_result(cuda_transpose, output_candidates, num_classes, bbox_conf_thresh, affine_matrix_d2i_device, decode_ptr_device, max_objects); //后处理 cuda
-        nms_kernel_invoker(decode_ptr_device, nms_thresh, max_objects);//cuda nms          
+        decode_result(cuda_transpose, output_candidates, num_classes, bbox_conf_thresh, 
+            affine_matrix_d2i_device, decode_ptr_device, max_objects, stream); //后处理 cuda
+        CHECK(cudaStreamSynchronize(stream));
+        nms_kernel_invoker(decode_ptr_device, nms_thresh, max_objects, stream);//cuda nms   
+        CHECK(cudaStreamSynchronize(stream));
         cudaMemcpyAsync(decode_ptr_host, decode_ptr_device, sizeof(float) * (1 + max_objects * NUM_BOX_ELEMENT), cudaMemcpyDeviceToHost, stream);
         CHECK(cudaStreamSynchronize(stream));
 

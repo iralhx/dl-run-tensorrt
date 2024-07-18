@@ -42,7 +42,8 @@ namespace app {
         v5_decode_result(buffers[1], output_candidates, num_classes, bbox_conf_thresh, affine_matrix_d2i_device, decode_ptr_device, max_objects); //∫Û¥¶¿Ì cuda
        
         CHECK(cudaStreamSynchronize(stream));
-        nms_kernel_invoker(decode_ptr_device, nms_thresh, max_objects);//cuda nms          
+        nms_kernel_invoker(decode_ptr_device, nms_thresh, max_objects,stream);//cuda nms      
+        CHECK(cudaStreamSynchronize(stream));
         cudaMemcpyAsync(decode_ptr_host, decode_ptr_device, sizeof(float) * (1 + max_objects * NUM_BOX_ELEMENT), cudaMemcpyDeviceToHost, stream);
         CHECK(cudaStreamSynchronize(stream));
 

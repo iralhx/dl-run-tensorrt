@@ -7,9 +7,9 @@
 __host__ __device__ void affine_project(float* matrix, float x, float y, float* ox, float* oy);
 
 namespace app {
-	void transposeDevice(float* src, int dim1, int dim2, float* dst);
+	void transposeDevice(float* src, int dim1, int dim2, float* dst, cudaStream_t stream);
 
-	void nms_kernel_invoker(float* parray, float nms_threshold, int max_objects);
+	void nms_kernel_invoker(float* parray, float nms_threshold, int max_objectst, cudaStream_t stream);
 	void preprocess_kernel_img(uint8_t* src,int src_width, int src_height,float* dst, int dst_width,
 		int dst_height,float* d2i, cudaStream_t stream);
 }

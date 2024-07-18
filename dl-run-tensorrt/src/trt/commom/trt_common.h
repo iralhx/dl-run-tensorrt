@@ -2,6 +2,7 @@
 #include<common/common.h>
 #include <iostream>
 #include <NvInferRuntimeCommon.h>
+#include<NvInferVersion.h>
 
 namespace trt {
 
@@ -30,4 +31,6 @@ namespace trt {
 	static Logger gLogger;
 
 	void set_device(int device_id);
+
+	int get_version();
 };

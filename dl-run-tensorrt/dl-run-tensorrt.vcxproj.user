@@ -4,9 +4,10 @@
     <ShowAllFiles>true</ShowAllFiles>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LocalDebuggerEnvironment>$(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
+    <LocalDebuggerEnvironment>
+    </LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerMergeEnvironment>true</LocalDebuggerMergeEnvironment>
     <LocalDebuggerWorkingDirectory>$(SolutionDir)bin\$(Platform)\$(Configuration)</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerMergeEnvironment>true</LocalDebuggerMergeEnvironment>
   </PropertyGroup>
 </Project>

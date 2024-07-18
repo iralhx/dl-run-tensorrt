@@ -5,5 +5,5 @@
 
 namespace app {
 	void decode_result(float* predict, int num_bboxes, int num_classes, float confidence_threshold, float* invert_affine_matrix,
-		float* parray, int max_objects);
+		float* parray, int max_objects, cudaStream_t stream);
 }
