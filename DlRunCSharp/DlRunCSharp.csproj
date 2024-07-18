@@ -53,6 +53,7 @@
     <Compile Include="src\app\base\IMosel.cs" />
     <Compile Include="src\app\base\Model.cs" />
     <Compile Include="src\app\segformer\Segformer.cs" />
+    <Compile Include="src\app\yolo\yolov8\YoloV8Detetion.cs" />
     <Compile Include="src\cuda\Cuda.cs" />
     <Compile Include="src\export\Export.cs" />
     <Compile Include="src\export\ExportHelper.cs" />
